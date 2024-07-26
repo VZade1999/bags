@@ -36,9 +36,9 @@ const Carts = () => {
           )}
         </div>
 
-        <div className="cart__bottom d-flex align-items-center justify-content-between">
+        <div className="cart__bottom d-flex align-items-center justify-content-between ">
           <h6>
-            Subtotal : <span>${totalAmount}</span>
+            Subtotal : <span>Rs{totalAmount}</span>
           </h6>
           <button>
             <Link to="/checkout" onClick={toggleCart}>

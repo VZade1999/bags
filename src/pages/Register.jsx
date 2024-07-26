@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 
 const Register = () => {
   const signupNameRef = useRef();
-  const signupPasswordRef = useRef();
-  const signupEmailRef = useRef();
+
+  const signupMobileRef = useRef();
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ const Register = () => {
                 <div className="form__group">
                   <input
                     type="text"
-                    placeholder="Full name"
+                    placeholder="Enter your name"
                     required
                     ref={signupNameRef}
                   />
@@ -32,17 +32,9 @@ const Register = () => {
                 <div className="form__group">
                   <input
                     type="email"
-                    placeholder="Email"
+                    placeholder="Mobile Number"
                     required
-                    ref={signupEmailRef}
-                  />
-                </div>
-                <div className="form__group">
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    required
-                    ref={signupPasswordRef}
+                    ref={signupMobileRef}
                   />
                 </div>
                 <button type="submit" className="addTOCart__btn">

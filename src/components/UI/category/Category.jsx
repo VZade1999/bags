@@ -11,21 +11,37 @@ import "../../../styles/category.css";
 
 const categoryData = [
   {
-    display: "Fastfood",
+    display: "Veg",
     imgUrl: categoryImg01,
   },
   {
-    display: "Pizza",
+    display: "Non-Veg",
     imgUrl: categoryImg02,
   },
 
   {
-    display: "Asian Food",
+    display: "Starters",
     imgUrl: categoryImg03,
   },
 
   {
-    display: "Row Meat",
+    display: "Biryani's",
+    imgUrl: categoryImg04,
+  },
+  {
+    display: "Chinese",
+    imgUrl: categoryImg04,
+  },
+  {
+    display: "Paneer",
+    imgUrl: categoryImg04,
+  },
+  {
+    display: "Roti",
+    imgUrl: categoryImg04,
+  },
+  {
+    display: "Raita",
     imgUrl: categoryImg04,
   },
 ];

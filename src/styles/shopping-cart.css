@@ -1,19 +1,23 @@
 .cart__container {
   position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: end;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.639);
   z-index: 99999;
+
 }
 
 .cart {
-  position: absolute;
+  position: center;
   top: 0;
   right: 0;
-  width: 400px;
-  height: 100%;
+  width: 80%;
+  height: 50%;
   background: #fff;
   z-index: 999999;
 }
@@ -33,6 +37,7 @@
   color: #fff;
   cursor: pointer;
 }
+
 .cart__item-list {
   height: calc(100vh - 140px);
   overflow-y: scroll;
@@ -45,7 +50,7 @@
   padding: 5px 20px;
   width: 100%;
   height: 80px;
-  background: #df2020;
+  background: #053bce;
 }
 
 .cart__bottom h6 {

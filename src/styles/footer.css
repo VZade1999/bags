@@ -1,11 +1,11 @@
 .footer {
   padding-top: 50px;
   padding-bottom: 30px;
-  background: #fde4e4;
+  background: #fca4002d;
 }
 
 .footer__logo img {
-  width: calc(100% - 80%);
+  width: calc(100% - 50%);
   margin-bottom: 5px;
 }
 
@@ -34,6 +34,7 @@
 .delivery__time-item p {
   color: #212245;
 }
+
 .footer__title {
   font-size: 1.1rem;
   color: #212245;
@@ -49,6 +50,7 @@
   align-items: center;
   cursor: pointer;
 }
+
 .newsletter input {
   background: transparent;
   border: none;
@@ -60,7 +62,7 @@
 }
 
 .newsletter span {
-  background: #df2020;
+  background: #053bce;
   padding: 5px 30px;
   border-radius: 5px;
 }
@@ -75,14 +77,14 @@
 
 .social__links span i {
   padding: 5px;
-  background: #df2020;
+  background: #053bce;
   color: #fff;
   border-radius: 50%;
 }
 
 .copyright__text {
   font-size: 0.8rem;
-  color: #df2020;
+  color: #053bce;
 }
 
 @media only screen and (max-width: 992px) {
@@ -90,6 +92,7 @@
     padding: 7px;
     font-size: 0.7rem;
   }
+
   .newsletter span {
     padding: 4px 20px;
     font-size: 0.7rem;
@@ -123,6 +126,7 @@
   .social__links span {
     padding: 4px;
   }
+
   .social__links span a {
     font-size: 0.7rem;
   }

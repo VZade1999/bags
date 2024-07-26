@@ -102,14 +102,14 @@ const Checkout = () => {
             <Col lg="4" md="6">
               <div className="checkout__bill">
                 <h6 className="d-flex align-items-center justify-content-between mb-3">
-                  Subtotal: <span>${cartTotalAmount}</span>
+                  Subtotal: <span>Rs<span className="ps-2" >{cartTotalAmount}</span></span>
                 </h6>
                 <h6 className="d-flex align-items-center justify-content-between mb-3">
-                  Shipping: <span>${shippingCost}</span>
+                  Shipping: <span>Rs<span className="ps-2">{shippingCost}</span></span>
                 </h6>
                 <div className="checkout__total">
                   <h5 className="d-flex align-items-center justify-content-between">
-                    Total: <span>${totalAmount}</span>
+                    Total: <span>Rs<span className="ps-2">{totalAmount}</span></span>
                   </h5>
                 </div>
               </div>

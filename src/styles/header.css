@@ -6,11 +6,13 @@
 
 .logo {
   text-align: center;
+  width: 300px;
 }
+
 .logo img {
   width: calc(100% - 60%);
   object-fit: contain;
-  margin-top: -40px;
+  margin-top: -20px;
 }
 
 .logo h5 {
@@ -29,11 +31,11 @@
 }
 
 .menu a:hover {
-  color: #df2020;
+  color: #053bce;
 }
 
 .active__menu {
-  color: #df2020 !important;
+  color: #053bce !important;
 }
 
 .cart__icon i,
@@ -52,7 +54,7 @@
   position: absolute;
   top: 30px;
   right: -10px;
-  background: #df2020;
+  background: #053bce;
   color: #fff;
   width: 15px;
   height: 15px;
@@ -75,13 +77,14 @@
   left: 0;
   background: #fff;
   z-index: 99999;
-  box-shadow: 5px 5px 15px -5px #fde4e4;
+  box-shadow: 5px 5px 15px -5px #a2d2ff;
 }
 
 @media only screen and (max-width: 992px) {
   .logo img {
     width: calc(100% - 70%);
   }
+
   .logo h5 {
     font-size: 0.8rem;
     margin-top: -15px;
@@ -141,6 +144,7 @@
   .logo img {
     margin-top: -70px !important;
   }
+
   .logo h5 {
     margin-top: -55px;
   }

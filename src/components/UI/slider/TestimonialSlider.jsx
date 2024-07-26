@@ -22,38 +22,29 @@ const TestimonialSlider = () => {
     <Slider {...settings}>
       <div>
         <p className="review__text">
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
-          atque, quam minus totam maiores laborum! Impedit consectetur illum
-          aliquid odit. Odit dolore ipsum quod debitis nostrum necessitatibus
-          quis dolorem quas!"
+          "I absolutely love my new handbag from BagHaven! It's stylish, durable, and I've received so many compliments on it."
         </p>
         <div className=" slider__content d-flex align-items-center gap-3 ">
           <img src={ava01} alt="avatar" className=" rounded" />
-          <h6>Jhon Doe</h6>
+          <h6>Anandrao Mahajan</h6>
         </div>
       </div>
       <div>
         <p className="review__text">
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
-          atque, quam minus totam maiores laborum! Impedit consectetur illum
-          aliquid odit. Odit dolore ipsum quod debitis nostrum necessitatibus
-          quis dolorem quas!"
+          "The backpack I purchased is perfect for my daily commute. It's roomy, comfortable, and looks great!"
         </p>
         <div className="slider__content d-flex align-items-center gap-3 ">
           <img src={ava02} alt="avatar" className=" rounded" />
-          <h6>Mitchell Marsh</h6>
+          <h6>Sumit Kalyan</h6>
         </div>
       </div>
       <div>
         <p className="review__text">
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
-          atque, quam minus totam maiores laborum! Impedit consectetur illum
-          aliquid odit. Odit dolore ipsum quod debitis nostrum necessitatibus
-          quis dolorem quas!"
+          "Devesh Bags offers amazing quality at such reasonable prices. I've bought several bags and have been thrilled with each one."
         </p>
         <div className="slider__content d-flex align-items-center gap-3 ">
           <img src={ava03} alt="avatar" className=" rounded" />
-          <h6>Steven Crock</h6>
+          <h6>Mayur Patil</h6>
         </div>
       </div>
     </Slider>
