@@ -17,11 +17,8 @@ import networkImg from "../assets/images/hero_5.png";
 
 import TestimonialSlider from "../components/UI/slider/TestimonialSlider.jsx";
 
-import ReactRain from "./../components/UI/Whether/MyComponent.jsx";
-
 
 const Home = () => {
-  <ReactRain numDrops="11500" />;
   return (
     <Helmet title="Home">
       <section>
