@@ -11,7 +11,7 @@ export const productSlice = createSlice({
         title: "Loaf Bread ",
         price: 35.0,
         image01: product_01_image_01,
-        category: "non-veg",
+        category: "School Bags",
 
         desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta ad et est, fugiat repudiandae neque illo delectus commodi magnam explicabo autem voluptates eaque velit vero facere mollitia. Placeat rem, molestiae error obcaecati enim doloribus impedit aliquam, maiores qui minus neque.",
       },
@@ -20,7 +20,7 @@ export const productSlice = createSlice({
         title: "Loaf Bread ",
         price: 35.0,
         image01: product_01_image_01,
-        category: "non-veg",
+        category: "Office Bags",
 
         desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta ad et est, fugiat repudiandae neque illo delectus commodi magnam explicabo autem voluptates eaque velit vero facere mollitia. Placeat rem, molestiae error obcaecati enim doloribus impedit aliquam, maiores qui minus neque.",
       },
@@ -29,7 +29,7 @@ export const productSlice = createSlice({
         title: "Loaf Bread ",
         price: 35.0,
         image01: product_01_image_01,
-        category: "non-veg",
+        category: "Ladies Bags",
 
         desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta ad et est, fugiat repudiandae neque illo delectus commodi magnam explicabo autem voluptates eaque velit vero facere mollitia. Placeat rem, molestiae error obcaecati enim doloribus impedit aliquam, maiores qui minus neque.",
       },
@@ -38,7 +38,7 @@ export const productSlice = createSlice({
         title: "Loaf Bread ",
         price: 35.0,
         image01: product_01_image_01,
-        category: "non-veg",
+        category: "Traveling Bags",
 
         desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta ad et est, fugiat repudiandae neque illo delectus commodi magnam explicabo autem voluptates eaque velit vero facere mollitia. Placeat rem, molestiae error obcaecati enim doloribus impedit aliquam, maiores qui minus neque.",
       },
@@ -47,7 +47,7 @@ export const productSlice = createSlice({
         title: "Loaf Veg ",
         price: 35.0,
         image01: product_01_image_01,
-        category: "veg",
+        category: "Traveling Bags",
 
         desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta ad et est, fugiat repudiandae neque illo delectus commodi magnam explicabo autem voluptates eaque velit vero facere mollitia. Placeat rem, molestiae error obcaecati enim doloribus impedit aliquam, maiores qui minus neque.",
       },
@@ -56,7 +56,7 @@ export const productSlice = createSlice({
         title: "Paneer",
         price: 35.0,
         image01: product_01_image_01,
-        category: "veg",
+        category: "Traveling Bags",
 
         desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta ad et est, fugiat repudiandae neque illo delectus commodi magnam explicabo autem voluptates eaque velit vero facere mollitia. Placeat rem, molestiae error obcaecati enim doloribus impedit aliquam, maiores qui minus neque.",
       },
@@ -65,7 +65,7 @@ export const productSlice = createSlice({
         title: "Butter Roti",
         price: 35.0,
         image01: product_01_image_01,
-        category: "roti",
+        category: "Office Bags",
 
         desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta ad et est, fugiat repudiandae neque illo delectus commodi magnam explicabo autem voluptates eaque velit vero facere mollitia. Placeat rem, molestiae error obcaecati enim doloribus impedit aliquam, maiores qui minus neque.",
       },
@@ -74,7 +74,7 @@ export const productSlice = createSlice({
         title: "Egg Masala",
         price: 35.0,
         image01: product_01_image_01,
-        category: "egg",
+        category: "Office Bags",
 
         desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta ad et est, fugiat repudiandae neque illo delectus commodi magnam explicabo autem voluptates eaque velit vero facere mollitia. Placeat rem, molestiae error obcaecati enim doloribus impedit aliquam, maiores qui minus neque.",
       },
