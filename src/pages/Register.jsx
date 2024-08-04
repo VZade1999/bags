@@ -1,16 +1,56 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { PostApi } from "../api/api";
 
 const Register = () => {
-  const signupNameRef = useRef();
+  // State to store form input values
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  console.log(from);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-  const signupMobileRef = useRef();
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-  const submitHandler = (e) => {
+  // Handle form submission
+  const submitHandler = async (e) => {
     e.preventDefault();
+    // Destructure form data for easier validation
+    const { name, email, password } = formData;
+
+    // Check if any field is empty and show alerts accordingly
+    if (!name) {
+      alert("Name is required");
+    } else if (!email) {
+      alert("Email is required");
+    } else if (!password) {
+      alert("Password is required");
+    } else {
+      // If all fields are filled, proceed with form submission
+      console.log("Form data submitted:", formData);
+      const registerResponse = await PostApi("/register", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
+      console.log(registerResponse);
+      if (registerResponse.data.status) {
+        navigate(from, { replace: true });
+      } else {
+        alert(registerResponse.data.message); // Set error message if registration fails
+      }
+    }
   };
 
   return (
@@ -24,17 +64,31 @@ const Register = () => {
                 <div className="form__group">
                   <input
                     type="text"
+                    name="name"
                     placeholder="Enter your name"
                     required
-                    ref={signupNameRef}
+                    value={formData.name}
+                    onChange={handleChange}
                   />
                 </div>
                 <div className="form__group">
                   <input
                     type="email"
-                    placeholder="Mobile Number"
+                    name="email"
+                    placeholder="Email"
                     required
-                    ref={signupMobileRef}
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="form__group">
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
                   />
                 </div>
                 <button type="submit" className="addTOCart__btn">

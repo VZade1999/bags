@@ -4,6 +4,8 @@ import logo from "../../assets/images/main_logo.png";
 import { NavLink, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { cartUiActions } from "../../store/shopping-cart/cartUiSlice";
+import { logout } from "../../store/userSlice";
+import Cookies from "js-cookie";
 import "../../styles/header.css";
 
 const nav__links = [
@@ -17,6 +19,8 @@ const Header = () => {
   const menuRef = useRef(null);
   const headerRef = useRef(null);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  console.log(isLoggedIn);
   const dispatch = useDispatch();
 
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
@@ -47,13 +51,19 @@ const Header = () => {
     };
   }, []);
 
+  const handleLogout = () => {
+    // Handle logout logic here
+    Cookies.remove("authCode");
+    dispatch(logout());
+    // Optionally, clear cookies or tokens here
+  };
+
   return (
     <header className="header" ref={headerRef}>
       <Container>
         <div className="nav__wrapper d-flex align-items-center justify-content-between">
           <div className="logo pt-3">
             <img src={logo} alt="logo" />
-            {/* <h5 className="pt-3" >Devesh Bags</h5> */}
           </div>
 
           {/* ======= menu ======= */}
@@ -89,6 +99,20 @@ const Header = () => {
             <span className="mobile__menu" onClick={toggleMenu}>
               <i className="ri-menu-line"></i>
             </span>
+
+            {isLoggedIn && (
+              <>
+                <span style={{ cursor: "pointer" }} onClick={handleLogout}>
+                  <strong>Log Out</strong>
+                </span>
+                <Link to='/myorders'>
+                  {" "}
+                  <span style={{ cursor: "pointer" }}>
+                    <strong>My Orders</strong>
+                  </span>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </Container>

@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Helmet from "../components/Helmet/Helmet";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {setProducts} from '../store/Products/productsSlice'
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import ProductCard from "../components/UI/product-card/ProductCard";
 import ReactPaginate from "react-paginate";
 import CategoryButton from "../components/UI/CategoryButton/CategoryButton";
+import { GetApi, PostApi } from "../api/api";
 
 import "../styles/all-foods.css";
 import "../styles/pagination.css";
@@ -16,6 +18,31 @@ const AllBags = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [pageNumber, setPageNumber] = useState(0);
   const [category, setCategory] = useState("ALL");
+  const dispatch =useDispatch();
+
+  const transformProducts = (products) => {
+    return products?.map((product) => ({
+      id: product._id,
+      title: product.name,
+      price: product.price,
+      image01: product.image ? product.image : "default_image.png", // Default image if none provided
+      category: product.category.name,
+      desc: product.description,
+    }));
+  };
+
+  useEffect(() => {
+    const getAllProducts = async () => {
+      try {
+        const allProducst = await GetApi("/productlist");
+        dispatch(setProducts(transformProducts(allProducst.data)))
+      } catch (error) {
+        alert(error);
+      }
+    };
+
+    getAllProducts();
+  }, []);
 
   const cartMap = useMemo(() => {
     return cartProducts.reduce((acc, item) => {
@@ -25,7 +52,7 @@ const AllBags = () => {
   }, [cartProducts]);
 
   const updatedData = useMemo(() => {
-    return products.map((item) => ({
+    return products?.map((item) => ({
       ...item,
       quantity: cartMap[item.id] || 0,
     }));
@@ -53,7 +80,7 @@ const AllBags = () => {
       setAllProducts(updatedData);
     } else {
       const filteredProducts = updatedData.filter(
-        (item) => item.category === category.toLowerCase()
+        (item) => item.category.toLowerCase() === category.toLowerCase()
       );
       setAllProducts(filteredProducts);
     }
@@ -84,6 +111,7 @@ const AllBags = () => {
   };
 
   const changeCategory = (selectedCategory) => {
+    console.log(selectedCategory.toLowerCase());
     setCategory(selectedCategory.toLowerCase());
   };
 

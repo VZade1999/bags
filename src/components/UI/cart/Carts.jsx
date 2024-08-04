@@ -40,9 +40,16 @@ const Carts = () => {
           <h6>
             Subtotal : <span>Rs{totalAmount}</span>
           </h6>
-          <button>
-            <Link to="/checkout" onClick={toggleCart}>
-              Checkout
+          <button className="addTOCart__btn">
+            <Link
+              to="/checkout"
+              onClick={toggleCart}
+              style={{
+                pointerEvents: totalAmount === 0 ? "none" : "auto",
+                color: totalAmount === 0 ? "grey" : "inherit",
+              }}
+            >
+              Proceed to checkout
             </Link>
           </button>
         </div>
