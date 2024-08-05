@@ -1,17 +1,46 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import ModalComponent from ".././components/UI/admin/ModalComponent";
-import Category from ".././components/UI/admin/Category";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import ModalComponent from "../components/UI/admin/ModalComponent";
+import Category from "../components/UI/admin/Category";
 import ProductList from "../components/UI/admin/ProductList";
+import { parseCookies } from "nookies"; // Use this to parse cookies
+import { jwtDecode } from "jwt-decode";
 
 const Admin = () => {
   const [show, setShow] = useState(false);
   const [propsData, setPropsData] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const cookies = parseCookies();
+    const authCode = cookies.authCode; // Replace 'authCode' with your actual cookie name
+
+    if (!authCode) {
+      // No authCode present, redirect to login page
+      navigate("/login");
+    } else {
+      try {
+        // Decode the authCode (assuming it's a JWT)
+        const decoded = jwtDecode(authCode);
+        const userRole = decoded.role;
+
+        if (userRole !== "admin") {
+          // Role is not admin, redirect to /bags
+          navigate("/bags");
+        }
+      } catch (error) {
+        // Handle decoding error or invalid token
+        console.error("Invalid authCode:", error);
+        navigate("/login");
+      }
+    }
+  }, [navigate]);
 
   const handleShow = (data) => {
     setShow(true);
     setPropsData(data);
   };
+
   const handleClose = () => setShow(false);
 
   return (
@@ -34,7 +63,6 @@ const Admin = () => {
             </button>
           </div>
           <Link to="orderlist">
-            {" "}
             <div className="pt-3 ps-3">
               <button className="btn btn-secondary px-5">Check Order</button>
             </div>

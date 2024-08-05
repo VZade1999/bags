@@ -1,8 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { GetApi } from "../../../api/api";
+import { useNavigate } from "react-router-dom";
 import ModalComponent from "./ModalComponent";
+import { parseCookies } from "nookies"; // Use this to parse cookies
+import { jwtDecode } from "jwt-decode";
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const cookies = parseCookies();
+    const authCode = cookies.authCode; // Replace 'authCode' with your actual cookie name
+
+    if (!authCode) {
+      // No authCode present, redirect to login page
+      navigate("/login");
+    } else {
+      try {
+        // Decode the authCode (assuming it's a JWT)
+        const decoded = jwtDecode(authCode);
+        const userRole = decoded.role;
+
+        if (userRole !== "admin") {
+          // Role is not admin, redirect to /bags
+          navigate("/bags");
+        }
+      } catch (error) {
+        // Handle decoding error or invalid token
+        console.error("Invalid authCode:", error);
+        navigate("/login");
+      }
+    }
+  }, [navigate]);
 
   useEffect(() => {
     const getAllOrders = async () => {
@@ -62,7 +91,10 @@ const OrderList = () => {
                       ? "Completed"
                       : "Pending"}
                   </td>
-                  <td onClick={() => handleShow(order)} style={{ cursor: "pointer" }}>
+                  <td
+                    onClick={() => handleShow(order)}
+                    style={{ cursor: "pointer" }}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -83,7 +115,11 @@ const OrderList = () => {
                 </tr>
               );
             })}
-            <ModalComponent show={show} data={propsData} handleClose={handleClose} />
+            <ModalComponent
+              show={show}
+              data={propsData}
+              handleClose={handleClose}
+            />
           </tbody>
         </table>
       </div>
