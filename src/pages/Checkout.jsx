@@ -8,7 +8,7 @@ import Logo from "../assets/images/logo_png.png";
 import { cartActions } from "../store/shopping-cart/cartSlice";
 import "../styles/checkout.css";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
 const Checkout = () => {
@@ -265,6 +265,8 @@ const Checkout = () => {
                   Make Payment
                 </button>
               </form>
+              <Link to='/paymentpolicyandreturnpolicy'><p className="pt-3 text-primary">Payment Policy & Return Policy</p></Link>
+              
             </Col>
 
             <Col lg="4" md="6">
@@ -296,6 +298,7 @@ const Checkout = () => {
                     </span>
                   </h5>
                 </div>
+                
               </div>
             </Col>
           </Row>

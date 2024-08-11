@@ -7,10 +7,6 @@ import "../../styles/footer.css";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
-
-
-
-  
   return (
     <footer className="footer">
       <Container>
@@ -31,7 +27,16 @@ const Footer = () => {
             <ListGroup className="deliver__time-list">
               <ListGroupItem className=" delivery__time-item border-0 ps-0">
                 <span>All Days</span>
-                <p>10:00am - 11:00pm</p>
+              </ListGroupItem>
+              <ListGroupItem className=" delivery__time-item border-0 ps-0">
+                <Link to="/teamsandcondition">
+                  <span>Teams And Conditions</span>
+                </Link>
+              </ListGroupItem>
+              <ListGroupItem className=" delivery__time-item border-0 ps-0">
+                <Link to="/privacypolicy ">
+                  <span>Privacy Policy </span>
+                </Link>
               </ListGroupItem>
             </ListGroup>
           </Col>

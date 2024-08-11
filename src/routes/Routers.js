@@ -9,9 +9,12 @@ import Checkout from "../pages/Checkout";
 import Contact from "../pages/Contact";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import Admin from '../pages/admin'
+import Admin from "../pages/admin";
 import OrderList from "../components/UI/admin/OrderList";
 import Myorders from "../pages/Myorders";
+import  Teamsandcondition  from "../pages/Teamsandcondition";
+import PrivacyPolicy from "../pages/PrivacyPolicy ";
+import Paymentpolicyandreturnpolicy from "../pages/Paymentpolicyandreturnpolicy";
 
 const Routers = () => {
   return (
@@ -27,7 +30,10 @@ const Routers = () => {
       <Route path="/contact" element={<Contact />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/myorders" element={<Myorders />} />
-      <Route path="/admin/orderlist" element={<OrderList/>} />
+      <Route path="/admin/orderlist" element={<OrderList />} />
+      <Route path="/teamsandcondition" element={<Teamsandcondition />} />
+      <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+      <Route path="/paymentpolicyandreturnpolicy" element={<Paymentpolicyandreturnpolicy />} />
     </Routes>
   );
 };
