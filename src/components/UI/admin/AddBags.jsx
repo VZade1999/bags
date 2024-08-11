@@ -6,10 +6,12 @@ const AddBags = () => {
   const [bagData, setBagData] = useState({
     bagName: "",
     price: "",
+    stock: "",
     description: "",
     category: "",
     image: null,
   });
+  console.log(bagData);
   useEffect(() => {
     const getList = async () => {
       try {
@@ -41,6 +43,10 @@ const AddBags = () => {
       alert("Bag Price is required");
       return;
     }
+    if (!bagData.stock) {
+      alert("Bag Stock is required");
+      return;
+    }
     if (!bagData.description) {
       alert("Bag Description is required");
       return;
@@ -58,6 +64,7 @@ const AddBags = () => {
       const res = await PostApi("/createproduct", {
         name: bagData.bagName,
         price: bagData.price,
+        stock: bagData.stock,
         description: bagData.description,
         category: bagData.category,
       });
@@ -80,7 +87,7 @@ const AddBags = () => {
 
   return (
     <>
-    <h3 className="px-3 py-1 text-primary">Add Bag</h3>
+      <h3 className="px-3 py-1 text-primary">Add Bag</h3>
       <form onSubmit={handleSubmit}>
         <div>
           <div className="d-flex justify-content-between w-100 flex-wrap">
@@ -107,6 +114,19 @@ const AddBags = () => {
                 aria-describedby="inputGroup-sizing-lg"
                 placeholder="Enter Bag Price"
                 value={bagData.price}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="p-3">
+              <label>Stock</label>
+              <input
+                className="form-control"
+                type="number"
+                name="stock"
+                aria-label="Sizing example input"
+                aria-describedby="inputGroup-sizing-lg"
+                placeholder="Enter Bag Stock"
+                value={bagData.stock}
                 onChange={handleChange}
               />
             </div>

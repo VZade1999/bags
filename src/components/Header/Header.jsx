@@ -105,8 +105,7 @@ const Header = () => {
                 <span style={{ cursor: "pointer" }} onClick={handleLogout}>
                   <strong>Log Out</strong>
                 </span>
-                <Link to='/myorders'>
-                  {" "}
+                <Link to="/myorders">
                   <span style={{ cursor: "pointer" }}>
                     <strong>My Orders</strong>
                   </span>

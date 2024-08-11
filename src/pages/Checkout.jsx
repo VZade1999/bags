@@ -25,7 +25,6 @@ const Checkout = () => {
     address: "",
     postalCode: "",
   });
-  console.log(customerdata);
 
   useEffect(() => {
     const authCode = Cookies.get("authCode");
@@ -59,7 +58,6 @@ const Checkout = () => {
         setdeliverycharges(
           chargesResponse.data[chargesResponse.data.length - 1]
         );
-        console.log(chargesResponse);
       } catch (error) {
         console.log(error);
       }
@@ -72,8 +70,11 @@ const Checkout = () => {
   const cartItem = useSelector((state) => state.cart.cartItems);
   const cartQuantity = useSelector((state) => state.cart.totalQuantity);
   const shippingCost = Number(deliverycharge.deliveryCost);
-
-  const totalAmount = cartTotalAmount + Number(shippingCost);
+  console.log(shippingCost);
+  const GSTamount = Number(cartTotalAmount * 0.18).toFixed(2);
+  console.log(GSTamount);
+  const GSTamountNumber = Number(GSTamount);
+  const totalAmount = (cartTotalAmount + shippingCost + GSTamountNumber).toFixed(2);
   const handleChange = (event) => {
     const { name, value } = event.target;
     setCustomerdata((prevData) => ({
@@ -108,14 +109,22 @@ const Checkout = () => {
           order_id: bagBookingResponse.data.message.id,
           handler: async function (response) {
             alert("Payment successful");
+            navigate("/myorders");
             try {
-              const createOrderResponse = await PostApi("/createorder", {
-                customerdata: customerdata,
-                cartItem: cartItem,
-                totalAmount: totalAmount,
-                cartQuantity: cartQuantity,
-                paymentJson: response,
-              }, true);
+              const createOrderResponse = await PostApi(
+                "/createorder",
+                {
+                  customerdata: customerdata,
+                  cartItem: cartItem,
+                  subtotal: cartTotalAmount,
+                  GST: GSTamount,
+                  shippingCost: shippingCost,
+                  totalAmount: totalAmount,
+                  cartQuantity: cartQuantity,
+                  paymentJson: response,
+                },
+                true
+              );
               if (createOrderResponse.data.status) {
                 alert("Order Places Successfully");
                 setCustomerdata({
@@ -142,6 +151,7 @@ const Checkout = () => {
           modal: {
             ondismiss: function () {
               alert("Payment was not completed, please try again.");
+              navigate("/checkout");
             },
           },
           prefill: {
@@ -263,6 +273,13 @@ const Checkout = () => {
                   Subtotal:{" "}
                   <span>
                     Rs<span className="ps-2">{cartTotalAmount}</span>
+                  </span>
+                </h6>
+                <h6 className="d-flex align-items-center justify-content-between mb-3">
+                  GST:{" "}
+                  <span>
+                    Rs
+                    <span className="ps-2">{GSTamount}</span>
                   </span>
                 </h6>
                 <h6 className="d-flex align-items-center justify-content-between mb-3">

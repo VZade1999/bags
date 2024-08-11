@@ -19,12 +19,14 @@ const AllBags = () => {
   const [pageNumber, setPageNumber] = useState(0);
   const [category, setCategory] = useState("ALL");
   const dispatch =useDispatch();
+  console.log(products);
 
   const transformProducts = (products) => {
     return products?.map((product) => ({
       id: product._id,
       title: product.name,
       price: product.price,
+      stock: product.stock,
       image01: product.image ? product.image : "default_image.png", // Default image if none provided
       category: product.category.name,
       desc: product.description,
@@ -35,11 +37,13 @@ const AllBags = () => {
     const getAllProducts = async () => {
       try {
         const allProducst = await GetApi("/productlist");
+        console.log(allProducst.data);
         dispatch(setProducts(transformProducts(allProducst.data)))
       } catch (error) {
         alert(error);
       }
     };
+    console.log(allProducts);
 
     getAllProducts();
   }, []);
@@ -103,6 +107,7 @@ const AllBags = () => {
     visitedPage,
     visitedPage + productPerPage
   );
+  console.log(displayPage);
 
   const pageCount = Math.ceil(searchedProduct.length / productPerPage);
 

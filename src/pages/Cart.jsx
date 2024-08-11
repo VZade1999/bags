@@ -11,6 +11,10 @@ import { Link } from "react-router-dom";
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
+  console.log(cartItems);
+  const subtotal = cartItems.reduce((accumulator, item) => {
+    return accumulator + item.totalPrice;
+}, 0);
 
   return (
     <Helmet title="Cart">
@@ -27,6 +31,7 @@ const Cart = () => {
                     <tr>
                       <th>Image</th>
                       <th>Product Title</th>
+                      <th>Product Description</th>
                       <th>Price</th>
                       <th>Quantity</th>
                       <th>Delete</th>
@@ -43,7 +48,7 @@ const Cart = () => {
               <div className="mt-4">
                 <h6>
                   Subtotal: Rs
-                  <span className="cart__subtotal ps-2">{totalAmount}</span>
+                  <span className="cart__subtotal ps-2">{subtotal}</span>
                 </h6>
                 <p>Taxes and shipping will calculate at checkout</p>
                 <div className="cart__page-btn">
@@ -72,7 +77,7 @@ const Cart = () => {
 };
 
 const Tr = (props) => {
-  const { id, image01, title, price, quantity } = props.item;
+  const { id, image01, title, price, quantity, desc } = props.item;
   const dispatch = useDispatch();
 
   const deleteItem = () => {
@@ -85,6 +90,7 @@ const Tr = (props) => {
         <img src={image01} alt="" />
       </td>
       <td className="text-center">{title}</td>
+      <td className="text-center">{desc}</td>
       <td className="text-center">Rs{price}</td>
       <td className="text-center">{quantity}</td>
       <td className="text-center cart__item-del">

@@ -46,6 +46,7 @@ const cartSlice = createSlice({
         state.cartItems.push({
           id: newItem.id,
           title: newItem.title,
+          desc: newItem.desc,
           image01: newItem.image01,
           price: newItem.price,
           quantity: 1,
@@ -123,7 +124,7 @@ const cartSlice = createSlice({
       state.totalQuantity = 0;
       state.totalAmount = 0;
       setItemFunc([], 0, 0);
-    }
+    },
   },
 });
 

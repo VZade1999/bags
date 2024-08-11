@@ -8,7 +8,9 @@ const ProductList = () => {
     const getAllProducts = async () => {
       try {
         const productListResponse = await GetApi("/productlist");
+        console.log(productListResponse.data);
         setProducts(productListResponse.data);
+
       } catch (error) {
         alert(error);
       }
@@ -42,6 +44,8 @@ const ProductList = () => {
               <th scope="col">Image</th>
               <th scope="col">Product Name</th>
               <th scope="col">Category</th>
+              <th scope="col">Description</th>
+              <th scope="col">Stock</th>
               <th scope="col">Price</th>
               <th scope="col">Action</th>
             </tr>
@@ -54,6 +58,8 @@ const ProductList = () => {
                   <td>{product.image}</td>
                   <td>{product.name}</td>
                   <td>{product.category.name}</td>
+                  <td>{product.description}</td>
+                  <td>{product.stock}</td>
                   <td>{product.price}</td>
                   <td>
                     <div className="d-flex">
