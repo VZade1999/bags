@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 const Myorders = () => {
   const navigate = useNavigate();
   const [myorderlist, setMyorderlist] = useState([]);
-  console.log(myorderlist); // For debugging
 
   useEffect(() => {
     const authCode = Cookies.get("authCode");
@@ -17,7 +16,6 @@ const Myorders = () => {
     }
 
     const decodedToken = jwtDecode(authCode);
-    console.log(decodedToken); // For debugging
 
     const getMyOrders = async () => {
       try {
@@ -28,7 +26,6 @@ const Myorders = () => {
         );
 
         // Make sure to adjust this based on your actual API response structure
-        console.log(response.data);
         setMyorderlist(response.data?.message.reverse() || []);
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -39,7 +36,6 @@ const Myorders = () => {
   }, [navigate]);
 
   const handlePrint = (order) => {
-    console.log(order);
     if (!order) return;
 
     // Sample GST rate

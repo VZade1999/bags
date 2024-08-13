@@ -140,7 +140,6 @@ const OrderList = () => {
   };
 
   const handlePrint = (order) => {
-    console.log(order);
     if (!order) return;
   
     // Sample GST rate

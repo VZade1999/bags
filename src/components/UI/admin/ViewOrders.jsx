@@ -5,14 +5,12 @@ import { PostApi } from "../../../api/api";
 const ViewOrders = ({ orderdata }) => {
   const [orderStatus, setOrderStatus] = React.useState(orderdata.status);
   const [searchQuery, setSearchQuery] = React.useState("");
-  console.log(orderdata);
 
   const handleStatusChange = (e) => {
     setOrderStatus(e.target.value);
   };
 
   const handleSave = async (e) => {
-    console.log(orderStatus);
     e.preventDefault();
     try {
       const response = await PostApi(
@@ -23,7 +21,6 @@ const ViewOrders = ({ orderdata }) => {
         },
         true
       );
-      console.log("Order status updated:", response.data);
       if (response.data.status) {
         alert(`Order Status updated as ${orderStatus}`);
       }

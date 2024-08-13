@@ -19,7 +19,6 @@ const AllBags = () => {
   const [pageNumber, setPageNumber] = useState(0);
   const [category, setCategory] = useState("ALL");
   const dispatch =useDispatch();
-  console.log(products);
 
   const transformProducts = (products) => {
     return products?.map((product) => ({
@@ -37,13 +36,11 @@ const AllBags = () => {
     const getAllProducts = async () => {
       try {
         const allProducst = await GetApi("/productlist");
-        console.log(allProducst.data);
         dispatch(setProducts(transformProducts(allProducst.data)))
       } catch (error) {
         alert(error);
       }
     };
-    console.log(allProducts);
 
     getAllProducts();
   }, []);
@@ -107,7 +104,6 @@ const AllBags = () => {
     visitedPage,
     visitedPage + productPerPage
   );
-  console.log(displayPage);
 
   const pageCount = Math.ceil(searchedProduct.length / productPerPage);
 
@@ -116,7 +112,6 @@ const AllBags = () => {
   };
 
   const changeCategory = (selectedCategory) => {
-    console.log(selectedCategory.toLowerCase());
     setCategory(selectedCategory.toLowerCase());
   };
 

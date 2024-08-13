@@ -11,7 +11,6 @@ const AddBags = () => {
     category: "",
     image: null,
   });
-  console.log(bagData);
   useEffect(() => {
     const getList = async () => {
       try {

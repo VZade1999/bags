@@ -1,22 +1,31 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../../../store/shopping-cart/cartSlice";
-import { Container, Row, Col } from "reactstrap";
+import { Col } from "reactstrap";
 import Image from "../../../assets/images/product_common.png";
 import "../../../styles/product-card.css";
+import { Link } from "react-router-dom";
+
+// Utility function to truncate description
+const truncateDescription = (desc, maxLength) => {
+  if (desc.length <= maxLength) {
+    return desc;
+  }
+  return desc.substring(0, maxLength) + "...";
+};
 
 const ProductCard = (props) => {
   const { id, title, price, quantity, desc, stock } = props.item;
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.cartItems); // To get the current cart items
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
   const handleDecrement = () => {
     dispatch(cartActions.removeItem(id));
   };
 
   const addToCart = () => {
-    const cartItem = cartItems.find((item) => item.id === id); // Find if the item is already in the cart
-    const currentQuantity = cartItem ? cartItem.quantity : 0; // Get current quantity in the cart
+    const cartItem = cartItems.find((item) => item.id === id);
+    const currentQuantity = cartItem ? cartItem.quantity : 0;
 
     if (currentQuantity + 1 > stock) {
       alert(`Only ${stock} ${title} available now.`);
@@ -34,23 +43,31 @@ const ProductCard = (props) => {
     );
   };
 
+  // Set maximum length for the description preview
+  const maxDescLength = 15;// Adjust this value based on your design needs
+  const truncatedDesc = truncateDescription(desc, maxDescLength);
+
   return (
     <div className="product__item">
       <Col lg="12" md="12" sm="12" xs="12">
         <span className="product__price justify-content-end fs-4 ">
           ₹{price}
         </span>
-        <div className="product__img ">
+        <div className="product__img">
           <img src={Image} alt="product-img" className="w-75" />
         </div>
       </Col>
       <Col lg="12" md="12" sm="12" xs="12">
         <div className="product__content">
           <h5 className="d-flex justify-content-start">
-            <span>{title}</span>
+            <span>
+              <Link to={`/foods/${id}`}>{title}</Link>
+            </span>
           </h5>
           <div className="d-flex justify-content-between">
-            <span>{desc}</span>
+            <span>
+              <Link to={`/foods/${id}`}>{truncatedDesc}</Link>
+            </span>
             {stock === 0 ? (
               <button className="addTOCart__btn py-2 bg-danger">
                 Out of Stock

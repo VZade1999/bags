@@ -70,9 +70,7 @@ const Checkout = () => {
   const cartItem = useSelector((state) => state.cart.cartItems);
   const cartQuantity = useSelector((state) => state.cart.totalQuantity);
   const shippingCost = Number(deliverycharge.deliveryCost);
-  console.log(shippingCost);
   const GSTamount = Number(cartTotalAmount * 0.18).toFixed(2);
-  console.log(GSTamount);
   const GSTamountNumber = Number(GSTamount);
   const totalAmount = (cartTotalAmount + shippingCost + GSTamountNumber).toFixed(2);
   const handleChange = (event) => {

@@ -8,9 +8,8 @@ const ProductList = () => {
     const getAllProducts = async () => {
       try {
         const productListResponse = await GetApi("/productlist");
-        console.log(productListResponse.data);
-        setProducts(productListResponse.data);
 
+        setProducts(productListResponse.data);
       } catch (error) {
         alert(error);
       }

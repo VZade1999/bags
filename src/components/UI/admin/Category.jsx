@@ -6,13 +6,11 @@ const Category = () => {
   const [charges, setCharges] = useState();
   const [deliveryCharges, setdeliverycharges] = useState([]);
   const [categories, setCategories] = useState([]);
-  console.log(deliveryCharges);
   useEffect(() => {
     const getList = async () => {
       try {
         const getAllCategory = await GetApi("/categorylist");
         const deliveryCharges = await GetApi("/deliverycharges");
-        console.log(deliveryCharges);
         setCategories(getAllCategory);
         setdeliverycharges(deliveryCharges.data[deliveryCharges.data.length-1]);
       } catch (error) {

@@ -35,12 +35,10 @@ const Login = () => {
     } else if (!password) {
       alert("Password is required");
     } else {
-      console.log("Form data submitted:", formData);
       const loginResponse = await PostApi("/login", {
         email: formData.email,
         password: formData.password,
       });
-      console.log(loginResponse);
       if (loginResponse?.data?.status) {
         const authCode = loginResponse.data.message;
         Cookies.set("authCode", authCode, { expires: 7 });

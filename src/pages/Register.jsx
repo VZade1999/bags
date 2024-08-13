@@ -10,7 +10,6 @@ const Register = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
-  console.log(from);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -38,13 +37,11 @@ const Register = () => {
       alert("Password is required");
     } else {
       // If all fields are filled, proceed with form submission
-      console.log("Form data submitted:", formData);
       const registerResponse = await PostApi("/register", {
         name: formData.name,
         email: formData.email,
         password: formData.password,
       });
-      console.log(registerResponse);
       if (registerResponse.data.status) {
         navigate(from, { replace: true });
       } else {
