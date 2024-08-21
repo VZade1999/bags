@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Container } from "reactstrap";
 import logo from "../../assets/images/main_logo.png";
 import { NavLink, Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { cartUiActions } from "../../store/shopping-cart/cartUiSlice";
 import { logout } from "../../store/userSlice";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 import "../../styles/header.css";
 
 const nav__links = [
@@ -22,13 +23,27 @@ const Header = () => {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const dispatch = useDispatch();
 
+  const [userEmail, setUserEmail] = useState("");
+
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
 
   const toggleCart = () => {
     dispatch(cartUiActions.toggle());
   };
 
-  // Define the event handler function
+  useEffect(() => {
+    // Decode the token and extract email
+    const token = Cookies.get("authCode");
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setUserEmail(decoded.email);
+      } catch (error) {
+        console.error("Failed to decode token:", error);
+      }
+    }
+  }, []);
+
   const handleScroll = () => {
     if (headerRef.current) {
       if (
@@ -43,20 +58,16 @@ const Header = () => {
   };
 
   useEffect(() => {
-    // Add event listener
     window.addEventListener("scroll", handleScroll);
 
-    // Cleanup function to remove event listener
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   const handleLogout = () => {
-    // Handle logout logic here
     Cookies.remove("authCode");
     dispatch(logout());
-    // Optionally, clear cookies or tokens here
   };
 
   return (
@@ -91,7 +102,10 @@ const Header = () => {
               <span className="cart__badge">{totalQuantity}</span>
             </span>
 
-            <span className="user">
+            <span
+              className="user"
+              title={isLoggedIn && userEmail ? userEmail : "Login"}
+            >
               <Link to="/login">
                 <i className="ri-user-line"></i>
               </Link>

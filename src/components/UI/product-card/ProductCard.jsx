@@ -2,9 +2,9 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../../../store/shopping-cart/cartSlice";
 import { Col } from "reactstrap";
-import Image from "../../../assets/images/product_common.png";
-import "../../../styles/product-card.css";
 import { Link } from "react-router-dom";
+import "../../../styles/product-card.css";
+import Image from "../../../assets/images/product_common.png";
 
 // Utility function to truncate description
 const truncateDescription = (desc, maxLength) => {
@@ -36,21 +36,21 @@ const ProductCard = (props) => {
       cartActions.addItem({
         id,
         title,
-        Image,
         price,
+        image01: Image, // Ensure that the image is correctly referenced
         desc,
       })
     );
   };
 
   // Set maximum length for the description preview
-  const maxDescLength = 15;// Adjust this value based on your design needs
+  const maxDescLength = 15; // Adjust this value based on your design needs
   const truncatedDesc = truncateDescription(desc, maxDescLength);
 
   return (
     <div className="product__item">
       <Col lg="12" md="12" sm="12" xs="12">
-        <span className="product__price justify-content-end fs-4 ">
+        <span className="product__price justify-content-end fs-4">
           ₹{price}
         </span>
         <div className="product__img">

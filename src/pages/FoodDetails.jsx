@@ -29,7 +29,8 @@ const FoodDetails = () => {
 
   // Get product from the store or localStorage
   const product = useMemo(() => {
-    let foundProduct = products.find((product) => product.id === id);
+    let foundProduct = products.find((product) => product.id == id);
+    console.log(foundProduct);
 
     if (!foundProduct) {
       const storedProducts = JSON.parse(localStorage.getItem("products"));

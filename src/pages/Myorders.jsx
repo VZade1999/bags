@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { PostApi } from "../api/api";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Myorders = () => {
   const navigate = useNavigate();
   const [myorderlist, setMyorderlist] = useState([]);
+  console.log(myorderlist);
 
   useEffect(() => {
     const authCode = Cookies.get("authCode");
@@ -256,8 +257,22 @@ const Myorders = () => {
             myorderlist.map((order, index) => (
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
-                <td>{order._id || "N/A"}</td>
-                <td>{order.cartItems?.[0]?.title || "N/A"}</td>
+                <td>
+                  <Link
+                    to={`/foods/${order._id}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    {order._id || "N/A"}
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    to={`/foods/${order.cartItems?.[0]?.id}`}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    {order.cartItems?.[0]?.title || "N/A"}
+                  </Link>
+                </td>
                 <td>{order.cartItems?.[0]?.quantity || "N/A"}</td>
                 <td>{order.subtotal || "N/A"}</td>
                 <td>{order.GST || "N/A"}</td>
