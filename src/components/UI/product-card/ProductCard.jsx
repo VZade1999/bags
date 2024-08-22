@@ -78,13 +78,15 @@ const ProductCard = (props) => {
               </button>
             ) : (
               <div className="d-flex addTOCart__btn custom_btn">
+                <span className="" onClick={handleDecrement}>
+                  <i className="ri-subtract-line"> </i>
+                </span>
+                <span className="px-3">{quantity}</span>
                 <span onClick={addToCart}>
                   <i className="ri-add-line"> </i>
                 </span>
-                <span className="ps-3">{quantity}</span>
-                <span className="ps-3" onClick={handleDecrement}>
-                  <i className="ri-subtract-line"> </i>
-                </span>
+                
+                
               </div>
             )}
           </div>

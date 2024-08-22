@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Helmet from "../components/Helmet/Helmet";
 import { useSelector, useDispatch } from "react-redux";
-import {setProducts} from '../store/Products/productsSlice'
+import { setProducts } from "../store/Products/productsSlice";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import ProductCard from "../components/UI/product-card/ProductCard";
 import ReactPaginate from "react-paginate";
 import CategoryButton from "../components/UI/CategoryButton/CategoryButton";
-import { GetApi, PostApi } from "../api/api";
+import { GetApi } from "../api/api";
 
 import "../styles/all-foods.css";
 import "../styles/pagination.css";
@@ -18,7 +18,8 @@ const AllBags = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [pageNumber, setPageNumber] = useState(0);
   const [category, setCategory] = useState("ALL");
-  const dispatch =useDispatch();
+  const [sortOption, setSortOption] = useState("Default"); // State for sorting
+  const dispatch = useDispatch();
 
   const transformProducts = (products) => {
     return products?.map((product) => ({
@@ -35,15 +36,15 @@ const AllBags = () => {
   useEffect(() => {
     const getAllProducts = async () => {
       try {
-        const allProducst = await GetApi("/productlist");
-        dispatch(setProducts(transformProducts(allProducst.data)))
+        const allProducts = await GetApi("/productlist");
+        dispatch(setProducts(transformProducts(allProducts.data)));
       } catch (error) {
         alert(error);
       }
     };
 
     getAllProducts();
-  }, []);
+  }, [dispatch]);
 
   const cartMap = useMemo(() => {
     return cartProducts.reduce((acc, item) => {
@@ -60,12 +61,10 @@ const AllBags = () => {
   }, [products, cartMap]);
 
   const Categories = useMemo(() => {
-    const categories = updatedData.map((item) => {
-      return {
-        id: item.id,
-        CategoryName: item.category,
-      };
-    });
+    const categories = updatedData.map((item) => ({
+      id: item.id,
+      CategoryName: item.category,
+    }));
     return categories.reduce((acc, current) => {
       if (!acc.some((item) => item.CategoryName === current.CategoryName)) {
         acc.push(current);
@@ -91,21 +90,40 @@ const AllBags = () => {
     if (searchTerm === "") {
       return item;
     }
-    if (item.title.toLowerCase().includes(searchTerm.toLowerCase())) {
-      return item;
-    } else {
-      return null;
-    }
+    return item.title.toLowerCase().includes(searchTerm.toLowerCase());
   });
+
+  // Sorting function
+  const sortProducts = (products, sortOption) => {
+    switch (sortOption) {
+      case "ascending":
+        return products.sort((a, b) => a.title.localeCompare(b.title));
+      case "descending":
+        return products.sort((a, b) => b.title.localeCompare(a.title));
+      case "high-price":
+        return products.sort((a, b) => b.price - a.price);
+      case "low-price":
+        return products.sort((a, b) => a.price - b.price);
+      case "in-stock":
+        return products.sort((a, b) => b.stock - a.stock);
+      default:
+        return products;
+    }
+  };
+
+  const sortedProducts = useMemo(
+    () => sortProducts([...searchedProduct], sortOption),
+    [searchedProduct, sortOption]
+  );
 
   const productPerPage = 24;
   const visitedPage = pageNumber * productPerPage;
-  const displayPage = searchedProduct.slice(
+  const displayPage = sortedProducts.slice(
     visitedPage,
     visitedPage + productPerPage
   );
 
-  const pageCount = Math.ceil(searchedProduct.length / productPerPage);
+  const pageCount = Math.ceil(sortedProducts.length / productPerPage);
 
   const changePage = ({ selected }) => {
     setPageNumber(selected);
@@ -113,6 +131,10 @@ const AllBags = () => {
 
   const changeCategory = (selectedCategory) => {
     setCategory(selectedCategory.toLowerCase());
+  };
+
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
   };
 
   return (
@@ -160,16 +182,23 @@ const AllBags = () => {
             </Col>
             <Col lg="6" md="6" sm="6" xs="12" className="mb-5">
               <div className="sorting__widget text-end">
-                <select className="w-50">
-                  <option>Default</option>
+                <select
+                  className="w-50"
+                  value={sortOption}
+                  onChange={handleSortChange}
+                >
+                  <option value="Default">Default</option>
+                  <option value="low-price">Low Price</option>
+                  <option value="high-price">High Price</option>
+                  <option value="in-stock">In Stock</option>
                   <option value="ascending">Alphabetically, A-Z</option>
                   <option value="descending">Alphabetically, Z-A</option>
-                  <option value="high-price">High Price</option>
-                  <option value="low-price">Low Price</option>
+                  
+                 
+                   {/* Added option for in-stock sorting */}
                 </select>
               </div>
             </Col>
-            {/* <Col lg="3" md="4" sm="6" xs="6" key={item.id} className="mb-4"> */}
             {displayPage.map((item) => (
               <Col
                 lg="3"
@@ -182,7 +211,6 @@ const AllBags = () => {
                 <ProductCard item={item} />
               </Col>
             ))}
-
             <div>
               <ReactPaginate
                 pageCount={pageCount}

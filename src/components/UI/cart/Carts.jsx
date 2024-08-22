@@ -1,12 +1,9 @@
 import React from "react";
-
 import { ListGroup } from "reactstrap";
 import { Link } from "react-router-dom";
 import CartItem from "./CartItem";
-
 import { useDispatch, useSelector } from "react-redux";
 import { cartUiActions } from "../../../store/shopping-cart/cartUiSlice";
-
 import "../../../styles/shopping-cart.css";
 
 const Carts = () => {
@@ -17,12 +14,13 @@ const Carts = () => {
   const toggleCart = () => {
     dispatch(cartUiActions.toggle());
   };
+
   return (
-    <div className="cart__container">
+    <div className={`cart__container ${cartProducts.length > 0 ? 'active' : ''}`}>
       <ListGroup className="cart">
         <div className="cart__close">
           <span onClick={toggleCart}>
-            <i class="ri-close-fill"></i>
+            <i className="ri-close-fill"></i>
           </span>
         </div>
 
@@ -36,7 +34,7 @@ const Carts = () => {
           )}
         </div>
 
-        <div className="cart__bottom d-flex align-items-center justify-content-between ">
+        <div className="cart__bottom d-flex align-items-center justify-content-between">
           <h6>
             Subtotal : <span>Rs{totalAmount}</span>
           </h6>

@@ -1,32 +1,110 @@
-th {
+/* General Section Styling */
+/* section {
+  padding: 40px 0;
+  background: #f4f5f7;
+} */
+
+/* Table Styling */
+.table {
+  background: #ffffff;
+  border-radius: 10px;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  overflow: hidden;
+}
+
+.table thead {
+  background: rgb(212, 212, 212);
+  color: #1c1c1c;
   text-align: center;
 }
 
-.cart__img-box {
-  width: 80px;
+.table th {
+  padding: 15px;
+  font-weight: 600;
 }
 
+.table tbody td {
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.table tbody tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+/* Cart Item Image */
 .cart__img-box img {
-  width: 100%;
+  max-width: 80px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Cart Item Delete Icon */
 .cart__item-del i {
+  font-size: 20px;
+  color: #e53935;
   cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
-.cart__page-btn button a:hover {
-  color: #fff;
+.cart__item-del i:hover {
+  color: #c62828;
+  transform: scale(1.1);
+}
+
+/* Subtotal and Buttons */
+.mt-4 {
+  background: #ffffff;
+  border-radius: 10px;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+  padding: 20px;
 }
 
 .cart__subtotal {
-  color: #053bce;
-  font-size: 1.5rem;
+  font-weight: 700;
+  color: #007bff;
 }
 
-@media only screen and (max-width: 768px) {
+.cart__page-btn {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+}
 
-  th,
-  td {
-    font-size: 0.8rem;
-  }
+.addTOCart__btn {
+  background: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  /* padding: 12px 20px; */
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.addTOCart__btn:hover {
+  background: #0056b3;
+  transform: scale(1.02);
+}
+
+.addTOCart__btn:disabled {
+  background: #b0bec5;
+  cursor: not-allowed;
+}
+
+.addTOCart__btn a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* Empty Cart Message */
+.text-center {
+  font-size: 18px;
+  color: #333;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

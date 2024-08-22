@@ -72,7 +72,12 @@ const Checkout = () => {
   const shippingCost = Number(deliverycharge.deliveryCost);
   const GSTamount = Number(cartTotalAmount * 0.18).toFixed(2);
   const GSTamountNumber = Number(GSTamount);
-  const totalAmount = (cartTotalAmount + shippingCost + GSTamountNumber).toFixed(2);
+  const totalAmount = (
+    cartTotalAmount +
+    shippingCost +
+    GSTamountNumber
+  ).toFixed(2);
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setCustomerdata((prevData) => ({
@@ -124,7 +129,7 @@ const Checkout = () => {
                 true
               );
               if (createOrderResponse.data.status) {
-                alert("Order Places Successfully");
+                alert("Order Placed Successfully");
                 setCustomerdata({
                   name: "",
                   email: "",
@@ -142,9 +147,6 @@ const Checkout = () => {
             } catch (error) {
               alert(error);
             }
-            // alert(response.razorpay_payment_id);
-            // alert(response.razorpay_order_id);
-            // alert(response.razorpay_signature);
           },
           modal: {
             ondismiss: function () {
@@ -263,8 +265,11 @@ const Checkout = () => {
                   Make Payment
                 </button>
               </form>
-              <Link to='/paymentpolicyandreturnpolicy'><p className="pt-3 text-primary">Payment Policy & Return Policy</p></Link>
-              
+              <Link to="/paymentpolicyandreturnpolicy">
+                <p className="pt-3 text-primary">
+                  Payment Policy & Return Policy
+                </p>
+              </Link>
             </Col>
 
             <Col lg="4" md="6">
@@ -276,7 +281,7 @@ const Checkout = () => {
                   </span>
                 </h6>
                 <h6 className="d-flex align-items-center justify-content-between mb-3">
-                  GST:{" "}
+                  GST 18%:
                   <span>
                     Rs
                     <span className="ps-2">{GSTamount}</span>
@@ -296,7 +301,6 @@ const Checkout = () => {
                     </span>
                   </h5>
                 </div>
-                
               </div>
             </Col>
           </Row>

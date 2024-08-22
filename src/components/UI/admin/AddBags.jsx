@@ -71,6 +71,7 @@ const AddBags = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validation checks
     if (!bagData.bagName) {
       alert("Bag Name is required");
       return;
@@ -93,6 +94,7 @@ const AddBags = () => {
     }
 
     try {
+      // Create a new FormData object
       const formData = new FormData();
       formData.append("name", bagData.bagName);
       formData.append("price", bagData.price);
@@ -105,10 +107,17 @@ const AddBags = () => {
         formData.append("images", image);
       });
 
-      const res = await PostApi("/createproduct", formData);
+      // Make the API call to submit the form data
+      const res = await PostApi("/createproduct", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Ensure the content type is set correctly
+        },
+      });
 
+      // Handle the response
       if (res.data.status) {
         alert("Bag added successfully!");
+        // Reset form fields and previews after successful submission
         setBagData({
           bagName: "",
           price: "",

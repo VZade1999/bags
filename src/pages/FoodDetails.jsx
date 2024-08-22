@@ -34,7 +34,9 @@ const FoodDetails = () => {
 
     if (!foundProduct) {
       const storedProducts = JSON.parse(localStorage.getItem("products"));
-      foundProduct = storedProducts ? storedProducts.find((p) => p.id === id) : null;
+      foundProduct = storedProducts
+        ? storedProducts.find((p) => p.id === id)
+        : null;
     }
 
     return foundProduct;
@@ -51,7 +53,7 @@ const FoodDetails = () => {
     if (product) {
       setPreviewImg(Image || Image);
     }
-    window.scroll(200,200);
+    window.scroll(200, 200);
   }, [product]);
 
   const addToCart = () => {
@@ -188,8 +190,11 @@ const FoodDetails = () => {
                     className="d-flex addTOCart__btn custom_btn"
                     style={{ width: "25%" }}
                   >
-                    <span className="ps-3" onClick={addToCart}>
-                      <i style={{cursor:"pointer"}} className="ri-add-line"></i>
+                    <span className="ps-3" onClick={handleDecrement}>
+                      <i
+                        style={{ cursor: "pointer" }}
+                        className="ri-subtract-line"
+                      ></i>
                     </span>
                     <span className="ps-3">
                       {
@@ -197,8 +202,11 @@ const FoodDetails = () => {
                           .quantity
                       }
                     </span>
-                    <span className="ps-3" onClick={handleDecrement}>
-                      <i style={{cursor:"pointer"}} className="ri-subtract-line"></i>
+                    <span className="ps-3" onClick={addToCart}>
+                      <i
+                        style={{ cursor: "pointer" }}
+                        className="ri-add-line"
+                      ></i>
                     </span>
                   </div>
                 ) : (
