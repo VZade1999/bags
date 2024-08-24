@@ -19,7 +19,7 @@ const AddBags = () => {
         const getAllCategory = await GetApi("/categorylist");
         setCategories(getAllCategory);
       } catch (error) {
-        alert(error);
+        alert("Failed to fetch categories: " + error.message);
       }
     };
     getList();
@@ -35,19 +35,17 @@ const AddBags = () => {
       const invalidFiles = fileArray.filter(
         (file) => !validTypes.includes(file.type)
       );
-
       if (invalidFiles.length > 0) {
         alert("Only jpg, jpeg, and png files are allowed.");
         return;
       }
 
-      // Append new files to the existing images array
+      // Update state with new files and previews
       setBagData((prevData) => ({
         ...prevData,
         images: [...prevData.images, ...fileArray],
       }));
 
-      // Generate image previews and append them to the existing previews array
       const previewArray = fileArray.map((file) => URL.createObjectURL(file));
       setImagePreviews((prevPreviews) => [...prevPreviews, ...previewArray]);
     } else {
@@ -72,24 +70,14 @@ const AddBags = () => {
     e.preventDefault();
 
     // Validation checks
-    if (!bagData.bagName) {
-      alert("Bag Name is required");
-      return;
-    }
-    if (!bagData.price) {
-      alert("Bag Price is required");
-      return;
-    }
-    if (!bagData.stock) {
-      alert("Bag Stock is required");
-      return;
-    }
-    if (!bagData.description) {
-      alert("Bag Description is required");
-      return;
-    }
-    if (!bagData.category) {
-      alert("Category is required");
+    if (
+      !bagData.bagName ||
+      !bagData.price ||
+      !bagData.stock ||
+      !bagData.description ||
+      !bagData.category
+    ) {
+      alert("Please fill in all required fields.");
       return;
     }
 
@@ -108,11 +96,7 @@ const AddBags = () => {
       });
 
       // Make the API call to submit the form data
-      const res = await PostApi("/createproduct", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Ensure the content type is set correctly
-        },
-      });
+      const res = await PostApi("/createproduct", formData);
 
       // Handle the response
       if (res.data.status) {
@@ -128,10 +112,13 @@ const AddBags = () => {
         });
         setImagePreviews([]); // Reset image previews
       } else {
-        alert("Failed to add bag! Something issue in server");
+        alert(
+          "Failed to add bag! " +
+            (res.data.message || "Something went wrong on the server.")
+        );
       }
     } catch (error) {
-      alert(error);
+      alert("An error occurred: " + error.message);
     }
   };
 
@@ -168,7 +155,7 @@ const AddBags = () => {
               />
             </div>
             <div className="p-3">
-              <label>Stock</label>
+              <label>Stock:</label>
               <input
                 className="form-control"
                 type="number"

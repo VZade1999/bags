@@ -20,14 +20,13 @@ const AllBags = () => {
   const [category, setCategory] = useState("ALL");
   const [sortOption, setSortOption] = useState("Default"); // State for sorting
   const dispatch = useDispatch();
-
   const transformProducts = (products) => {
     return products?.map((product) => ({
       id: product._id,
       title: product.name,
       price: product.price,
       stock: product.stock,
-      image01: product.image ? product.image : "default_image.png", // Default image if none provided
+      image01: product.images, // Default image if none provided
       category: product.category.name,
       desc: product.description,
     }));

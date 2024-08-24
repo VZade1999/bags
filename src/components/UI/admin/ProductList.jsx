@@ -3,6 +3,7 @@ import { PostApi, GetApi } from "../../../api/api";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
+  console.log(products);
 
   useEffect(() => {
     const getAllProducts = async () => {
@@ -54,7 +55,14 @@ const ProductList = () => {
               return (
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
-                  <td>{product.image}</td>
+                  <td className="w-25">
+                    {" "}
+                    <img
+                      src={`http://localhost:5000/${product.images[0]}`}
+                      alt="Product"
+                      style={{width:"50px"}}
+                    />
+                  </td>
                   <td>{product.name}</td>
                   <td>{product.category.name}</td>
                   <td>{product.description}</td>
@@ -65,6 +73,7 @@ const ProductList = () => {
                       <div
                         onClick={() => handleDeleteProduct(product)}
                         style={{ cursor: "pointer" }}
+                        className="pe-3"
                       >
                         <svg
                           width="20"
@@ -79,7 +88,26 @@ const ProductList = () => {
                           />
                         </svg>
                       </div>
+                      {/* <div>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-6"
+                          width="20"
+                          height="20"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                          />
+                        </svg>
+                      </div> */}
                     </div>
+                    <div></div>
                   </td>
                 </tr>
               );

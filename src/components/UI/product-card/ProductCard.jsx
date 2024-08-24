@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cartActions } from "../../../store/shopping-cart/cartSlice";
 import { Col } from "reactstrap";
@@ -15,9 +15,11 @@ const truncateDescription = (desc, maxLength) => {
 };
 
 const ProductCard = (props) => {
-  const { id, title, price, quantity, desc, stock } = props.item;
+  const { id, title, price, quantity, desc, stock, image01 } = props.item;
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleDecrement = () => {
     dispatch(cartActions.removeItem(id));
@@ -37,7 +39,7 @@ const ProductCard = (props) => {
         id,
         title,
         price,
-        image01: Image, // Ensure that the image is correctly referenced
+        image01: image01[0], // Ensure that the image is correctly referenced
         desc,
       })
     );
@@ -47,6 +49,18 @@ const ProductCard = (props) => {
   const maxDescLength = 15; // Adjust this value based on your design needs
   const truncatedDesc = truncateDescription(desc, maxDescLength);
 
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? image01.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === image01.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
   return (
     <div className="product__item">
       <Col lg="12" md="12" sm="12" xs="12">
@@ -54,7 +68,26 @@ const ProductCard = (props) => {
           ₹{price}
         </span>
         <div className="product__img">
-          <img src={Image} alt="product-img" className="w-75" />
+          {image01.length > 1 && (
+            <button
+              className="slider-arrow left"
+              onClick={handlePrevImage}
+            >
+              &lt;
+            </button>
+          )}
+          <img
+            src={`http://localhost:5000/${image01[currentImageIndex]}`}
+            alt="product-img"
+          />
+          {image01.length > 1 && (
+            <button
+              className="slider-arrow right"
+              onClick={handleNextImage}
+            >
+              &gt;
+            </button>
+          )}
         </div>
       </Col>
       <Col lg="12" md="12" sm="12" xs="12">
@@ -85,8 +118,6 @@ const ProductCard = (props) => {
                 <span onClick={addToCart}>
                   <i className="ri-add-line"> </i>
                 </span>
-                
-                
               </div>
             )}
           </div>

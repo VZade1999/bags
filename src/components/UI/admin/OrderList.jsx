@@ -393,8 +393,8 @@ const OrderList = () => {
                 <td>{order.createdAt}</td>
                 <td>{order.totalAmount}</td>
                 <td>{order.cartQuantity}</td>
-                <div> <td
-                  className="p-1 px-3 rounded"
+                 <td
+                  className="rounded"
                   style={{
                     backgroundColor:
                       order.status === "Order Rejected"
@@ -405,7 +405,7 @@ const OrderList = () => {
                   }}
                 >
                   {order.status || "N/A"}
-                </td></div>
+                </td>
                
                 
                 <td>

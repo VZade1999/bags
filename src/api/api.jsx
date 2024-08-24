@@ -1,8 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-// const API_URL = "http://localhost:5000";
-const API_URL = "https://bagsbe-production.up.railway.app";
+const API_URL = "http://localhost:5000";
+// const API_URL = "https://bagsbe-production.up.railway.app";
 
 // Function to get auth headers from cookies
 const getAuthHeaders = () => {
@@ -12,9 +12,11 @@ const getAuthHeaders = () => {
 
 // Function for POST requests
 export const PostApi = async (path, payload, auth = false) => {
+  const isFormData = payload instanceof FormData;
+  const contentType = isFormData ? "multipart/form-data" : "application/json";
   try {
     const headers = {
-      "Content-Type": "application/json",
+      "Content-Type": contentType,
       ...(auth ? getAuthHeaders() : {}), // Conditionally include auth headers
     };
 

@@ -5,7 +5,6 @@ import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { cartActions } from "../store/shopping-cart/cartSlice";
-import ReactPaginate from "react-paginate";
 import { GetApi } from "../api/api";
 import "../styles/product-details.css";
 import Image from "../assets/images/product_common.png";
@@ -30,7 +29,6 @@ const FoodDetails = () => {
   // Get product from the store or localStorage
   const product = useMemo(() => {
     let foundProduct = products.find((product) => product.id == id);
-    console.log(foundProduct);
 
     if (!foundProduct) {
       const storedProducts = JSON.parse(localStorage.getItem("products"));
@@ -50,8 +48,8 @@ const FoodDetails = () => {
   }, [products]);
 
   useEffect(() => {
-    if (product) {
-      setPreviewImg(Image || Image);
+    if (product && product.image01 && product.image01.length > 0) {
+      setPreviewImg(product.image01[0]); // Set the first image as the default preview
     }
     window.scroll(200, 200);
   }, [product]);
@@ -71,7 +69,7 @@ const FoodDetails = () => {
           id: product.id,
           title: product.title,
           price: product.price,
-          image01: Image || Image,
+          image01: product.image01[0] || Image,
           desc: product.desc,
         })
       );
@@ -84,11 +82,6 @@ const FoodDetails = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log({
-      name: enteredName,
-      email: enteredEmail,
-      message: reviewMsg,
-    });
     setEnteredName("");
     setEnteredEmail("");
     setReviewMsg("");
@@ -137,26 +130,23 @@ const FoodDetails = () => {
           <Row>
             <Col lg="2" md="2">
               <div className="product__images">
-                <div
-                  className="img__item mb-3"
-                  onClick={() => setPreviewImg(Image || Image)}
-                >
-                  <img src={Image || Image} alt="Product" className="w-50" />
-                </div>
-                {product.image02 && (
-                  <div
-                    className="img__item mb-3"
-                    onClick={() => setPreviewImg(product.image02)}
-                  >
-                    <img src={product.image02} alt="Product" className="w-50" />
-                  </div>
-                )}
-                {Image2 && (
-                  <div
-                    className="img__item"
-                    onClick={() => setPreviewImg(Image2)}
-                  >
-                    <img src={Image2} alt="Product" className="w-50" />
+                {product.image01 && product.image01.length > 0 ? (
+                  product.image01.map((img, index) => (
+                    <div
+                      key={index}
+                      className="img__item mb-3"
+                      onClick={() => setPreviewImg(img)}
+                    >
+                      <img
+                        src={`http://localhost:5000/${img}`}
+                        alt={`Product ${index}`}
+                        className="w-50"
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <div className="img__item mb-3">
+                    <img src={Image} alt="Product" className="w-50" />
                   </div>
                 )}
               </div>
@@ -164,7 +154,11 @@ const FoodDetails = () => {
 
             <Col lg="4" md="4">
               <div className="product__main-img">
-                <img src={previewImg} alt="Product" className="w-100" />
+                <img
+                  src={`http://localhost:5000/${previewImg}`}
+                  alt="Product"
+                  className="w-100"
+                />
               </div>
             </Col>
 

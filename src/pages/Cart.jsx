@@ -13,7 +13,7 @@ const Cart = () => {
   const totalAmount = useSelector((state) => state.cart.totalAmount);
   const subtotal = cartItems.reduce((accumulator, item) => {
     return accumulator + item.totalPrice;
-}, 0);
+  }, 0);
 
   return (
     <Helmet title="Cart">
@@ -86,7 +86,10 @@ const Tr = (props) => {
   return (
     <tr>
       <td className="text-center cart__img-box">
-        <img src={image01} alt="" />
+        <img
+          src={`http://localhost:5000/${image01}`}
+          alt=""
+        />
       </td>
       <td className="text-center">{title}</td>
       <td className="text-center">{desc}</td>
