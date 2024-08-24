@@ -138,7 +138,7 @@ const FoodDetails = () => {
                       onClick={() => setPreviewImg(img)}
                     >
                       <img
-                        src={`http://localhost:5000/${img}`}
+                        src={`https://bagsbe-production.up.railway.app/${img}`}
                         alt={`Product ${index}`}
                         className="w-50"
                       />
@@ -155,7 +155,7 @@ const FoodDetails = () => {
             <Col lg="4" md="4">
               <div className="product__main-img">
                 <img
-                  src={`http://localhost:5000/${previewImg}`}
+                  src={`https://bagsbe-production.up.railway.app/${previewImg}`}
                   alt="Product"
                   className="w-100"
                 />

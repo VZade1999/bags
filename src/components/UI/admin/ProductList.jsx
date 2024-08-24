@@ -58,7 +58,7 @@ const ProductList = () => {
                   <td className="w-25">
                     {" "}
                     <img
-                      src={`http://localhost:5000/${product.images[0]}`}
+                      src={`https://bagsbe-production.up.railway.app/${product.images[0]}`}
                       alt="Product"
                       style={{width:"50px"}}
                     />
