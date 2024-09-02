@@ -3,7 +3,6 @@ import { PostApi, GetApi } from "../../../api/api";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
-  console.log(products);
 
   useEffect(() => {
     const getAllProducts = async () => {

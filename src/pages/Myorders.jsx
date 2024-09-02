@@ -8,7 +8,6 @@ import "../styles/myorders.css"; // Assuming you have a separate CSS file
 const Myorders = () => {
   const navigate = useNavigate();
   const [myorderlist, setMyorderlist] = useState([]);
-  console.log("my order list", myorderlist);
 
   useEffect(() => {
     const authCode = Cookies.get("authCode");
@@ -37,7 +36,6 @@ const Myorders = () => {
   }, [navigate]);
 
   const handlePrint = (order) => {
-    console.log(order);
     if (!order) return;
 
     const gstRate = 0.18;

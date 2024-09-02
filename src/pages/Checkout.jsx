@@ -77,7 +77,6 @@ const Checkout = () => {
 
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
   const cartItem = useSelector((state) => state.cart.cartItems);
-  console.log(cartItem);
   const productWeight = cartItem.map((product) => {
     return product.weight * product.quantity;
   });
