@@ -79,7 +79,7 @@ const ProductCard = (props) => {
             </button>
           )}
           <img
-            src={`http://localhost:5000/${image01[currentImageIndex]}`}
+            src={`https://bagsbe-production.up.railway.app/${image01[currentImageIndex]}`}
             alt="product-img"
           />
           {image01.length > 1 && (
