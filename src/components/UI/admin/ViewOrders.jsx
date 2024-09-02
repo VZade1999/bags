@@ -125,7 +125,7 @@ const ViewOrders = ({ orderdata }) => {
                   <tbody>
                     <tr>
                       <td className="pe-5">Sub-Total</td>
-                      <td className="ps-5">{orderdata.subtotal}</td>
+                      <td className="ps-5">{orderdata.subtotal.toFixed(2)}</td>
                     </tr>
                     <tr>
                       <td className="pe-5">GST</td>
@@ -133,7 +133,7 @@ const ViewOrders = ({ orderdata }) => {
                     </tr>
                     <tr>
                       <td className="pe-5">Shipping Charges</td>
-                      <td className="ps-5">{orderdata.Shipping}</td>
+                      <td className="ps-5">{orderdata.Shipping.toFixed(2)}</td>
                     </tr>
                     <tr>
                       <td>Total</td>

@@ -8,11 +8,12 @@ const AddBags = () => {
     price: "",
     stock: "",
     description: "",
+    weight: "",
+    packingCharges: "",
     category: "",
     images: [], // Array to hold multiple images
   });
   const [imagePreviews, setImagePreviews] = useState([]); // Array to hold image previews
-
   useEffect(() => {
     const getList = async () => {
       try {
@@ -75,7 +76,10 @@ const AddBags = () => {
       !bagData.price ||
       !bagData.stock ||
       !bagData.description ||
-      !bagData.category
+      !bagData.weight ||
+      !bagData.category ||
+      !bagData.images ||
+      !bagData.packingCharges
     ) {
       alert("Please fill in all required fields.");
       return;
@@ -88,6 +92,8 @@ const AddBags = () => {
       formData.append("price", bagData.price);
       formData.append("stock", bagData.stock);
       formData.append("description", bagData.description);
+      formData.append("weight", bagData.weight);
+      formData.append("packingCharges", bagData.packingCharges);
       formData.append("category", bagData.category);
 
       // Append each image file to the FormData
@@ -107,6 +113,8 @@ const AddBags = () => {
           price: "",
           stock: "",
           description: "",
+          weight: "",
+          packingCharges: "",
           category: "",
           images: [], // Reset images array after submission
         });
@@ -167,17 +175,45 @@ const AddBags = () => {
                 onChange={handleChange}
               />
             </div>
-            <div className="p-3">
-              <label>Bag Description:</label>
-              <textarea
-                className="form-control"
-                name="description"
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-lg"
-                placeholder="Enter Bag Description"
-                value={bagData.description}
-                onChange={handleChange}
-              />
+            <div className="d-flex">
+              <div className="p-3">
+                <label>Bag Description:</label>
+                <textarea
+                  className="form-control"
+                  name="description"
+                  aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-lg"
+                  placeholder="Enter Bag Description"
+                  value={bagData.description}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="p-3">
+                <label>Bag Weight:</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  name="weight"
+                  aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-lg"
+                  placeholder="Bag Weight in Grams"
+                  value={bagData.weight}
+                  onChange={handleChange}
+                ></input>
+              </div>
+              <div className="p-3">
+                <label>Packing Charges:</label>
+                <input
+                  className="form-control"
+                  type="number"
+                  name="packingCharges"
+                  aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-lg"
+                  placeholder="Packing Charges"
+                  value={bagData.packingCharges}
+                  onChange={handleChange}
+                ></input>
+              </div>
             </div>
           </div>
           <div className="p-3">

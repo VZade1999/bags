@@ -24,6 +24,7 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const [userEmail, setUserEmail] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
 
@@ -68,6 +69,15 @@ const Header = () => {
   const handleLogout = () => {
     Cookies.remove("authCode");
     dispatch(logout());
+    setShowDropdown(!showDropdown);
+  };
+
+  const closeDropdown = () => {
+    setShowDropdown(!showDropdown);
+  }
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
   };
 
   return (
@@ -105,29 +115,35 @@ const Header = () => {
             <span
               className="user"
               title={isLoggedIn && userEmail ? userEmail : "Login"}
+              onClick={toggleDropdown} // Toggle dropdown on click
             >
-              <Link to="/login">
-                <i className="ri-user-line"></i>
-              </Link>
+              <i className="ri-user-line"></i>
             </span>
 
             <span className="mobile__menu" onClick={toggleMenu}>
               <i className="ri-menu-line"></i>
             </span>
-
-            {isLoggedIn && (
-              <>
-                <span style={{ cursor: "pointer" }} onClick={handleLogout}>
-                  <strong>Log Out</strong>
-                </span>
-                <Link to="/myorders">
-                  <span style={{ cursor: "pointer" }}>
-                    <strong>My Orders</strong>
-                  </span>
-                </Link>
-              </>
-            )}
           </div>
+
+          {/* ======== user dropdown menu ========= */}
+          {showDropdown && (
+            <div className="user-dropdown">
+              {isLoggedIn ? (
+                <>
+                  <Link to="/login" onClick={handleLogout} className="dropdown-item" >Log Out</Link>
+                    
+              
+                  <Link to="/myorders" onClick={closeDropdown} className="dropdown-item">
+                    My Orders
+                  </Link>
+                </>
+              ) : (
+                <Link to="/login" onClick={closeDropdown} className="dropdown-item">
+                  Login
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       </Container>
     </header>

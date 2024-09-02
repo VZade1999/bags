@@ -29,6 +29,7 @@ const AllBags = () => {
       image01: product.images, // Default image if none provided
       category: product.category.name,
       desc: product.description,
+      weight: product.weight,
     }));
   };
 
@@ -36,7 +37,13 @@ const AllBags = () => {
     const getAllProducts = async () => {
       try {
         const allProducts = await GetApi("/productlist");
-        dispatch(setProducts(transformProducts(allProducts.data)));
+        const updatedProducts = allProducts.data.map(product => {
+          return {
+            ...product,
+            price: product.price + product.packingcharges
+          };
+        });
+        dispatch(setProducts(transformProducts(updatedProducts)));
       } catch (error) {
         alert(error);
       }

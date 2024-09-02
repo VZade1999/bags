@@ -146,7 +146,7 @@ const OrderList = () => {
     const gstRate = 0.18; // 18%
     const subtotal = order.subtotal;
     const gstAmount = subtotal * gstRate;
-    const totalPayment = subtotal + gstAmount;
+    const totalPayment = order.totalAmount;
   
     const printWindow = window.open("", "", "width=1600,height=900");
     const printContent = `<!DOCTYPE html>
@@ -305,7 +305,7 @@ const OrderList = () => {
     <p><strong>Order Placed At:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
     <p><strong>Order Status:</strong> ${order.status || "N/A"}</p>
     <p><strong>Subtotal:</strong> ₹${subtotal}</p>
-    <p><strong>Shipping Charges:</strong> ₹${order.Shipping}</p>
+    <p><strong>Shipping Charges:</strong> ₹${order.Shipping.toFixed(2)}</p>
     <p><strong>GST (18%):</strong> ₹${gstAmount.toFixed(2)}</p>
     <p><strong>Total Payment:</strong> ₹${totalPayment.toFixed(2)}</p>
   </div>

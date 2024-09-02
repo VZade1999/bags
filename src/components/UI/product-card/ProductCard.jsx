@@ -15,7 +15,8 @@ const truncateDescription = (desc, maxLength) => {
 };
 
 const ProductCard = (props) => {
-  const { id, title, price, quantity, desc, stock, image01 } = props.item;
+  console.log(props);
+  const { id, title, price, quantity, desc, weight, stock, image01 } = props.item;
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.cartItems);
 
@@ -41,6 +42,7 @@ const ProductCard = (props) => {
         price,
         image01: image01[0], // Ensure that the image is correctly referenced
         desc,
+        weight,
       })
     );
   };
@@ -77,7 +79,7 @@ const ProductCard = (props) => {
             </button>
           )}
           <img
-            src={`https://bagsbe-production.up.railway.app/${image01[currentImageIndex]}`}
+            src={`http://localhost:5000/${image01[currentImageIndex]}`}
             alt="product-img"
           />
           {image01.length > 1 && (

@@ -45,6 +45,8 @@ const ProductList = () => {
               <th scope="col">Product Name</th>
               <th scope="col">Category</th>
               <th scope="col">Description</th>
+              <th scope="col">Weight</th>
+              <th scope="col">Packing Charges</th>
               <th scope="col">Stock</th>
               <th scope="col">Price</th>
               <th scope="col">Action</th>
@@ -58,7 +60,7 @@ const ProductList = () => {
                   <td className="w-25">
                     {" "}
                     <img
-                      src={`https://bagsbe-production.up.railway.app/${product.images[0]}`}
+                      src={`http://localhost:5000/${product.images[0]}`}
                       alt="Product"
                       style={{width:"50px"}}
                     />
@@ -66,6 +68,8 @@ const ProductList = () => {
                   <td>{product.name}</td>
                   <td>{product.category.name}</td>
                   <td>{product.description}</td>
+                  <td>{product.weight}</td>
+                  <td>{product.packingcharges}</td>
                   <td>{product.stock}</td>
                   <td>{product.price}</td>
                   <td>

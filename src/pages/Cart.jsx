@@ -87,7 +87,7 @@ const Tr = (props) => {
     <tr>
       <td className="text-center cart__img-box">
         <img
-          src={`https://bagsbe-production.up.railway.app/${image01}`}
+          src={`http://localhost:5000/${image01}`}
           alt=""
         />
       </td>

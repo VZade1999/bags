@@ -9,12 +9,16 @@ import { cartActions } from "../store/shopping-cart/cartSlice";
 import "../styles/checkout.css";
 import Cookies from "js-cookie";
 import { useNavigate, Link } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Corrected import
+import axios from "axios"; //
+import L from "leaflet";
+import "leaflet-routing-machine";
 
 const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [deliverycharge, setdeliverycharges] = useState([]);
+  const [distance, setDistance] = useState(null);
   const [customerdata, setCustomerdata] = useState({
     useremail: "",
     name: "",
@@ -25,7 +29,7 @@ const Checkout = () => {
     address: "",
     postalCode: "",
   });
-
+  const [isReseller, setIsReseller] = useState(false); // Add state to track if the user is a reseller
   useEffect(() => {
     const authCode = Cookies.get("authCode");
     if (!authCode) {
@@ -38,6 +42,11 @@ const Checkout = () => {
       useremail: decodedToken.email || "",
     }));
 
+    // Check if the user is a reseller
+    if (decodedToken.role === "reseller") {
+      setIsReseller(true);
+    }
+
     window.scrollTo(0, 0);
 
     const script = document.createElement("script");
@@ -49,7 +58,7 @@ const Checkout = () => {
     return () => {
       document.body.removeChild(script);
     };
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const getDeliveryCharges = async () => {
@@ -68,15 +77,79 @@ const Checkout = () => {
 
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
   const cartItem = useSelector((state) => state.cart.cartItems);
+  console.log(cartItem);
+  const productWeight = cartItem.map((product) => {
+    return product.weight * product.quantity;
+  });
+  const sum = productWeight.reduce(
+    (accumulator, currentValue) => accumulator + currentValue,
+    0
+  );
+
   const cartQuantity = useSelector((state) => state.cart.totalQuantity);
-  const shippingCost = Number(deliverycharge.deliveryCost);
-  const GSTamount = Number(cartTotalAmount * 0.18).toFixed(2);
+  //const productWeight = Number(cartItem.weight) * cartQuantity;
+  function roundUpToNearestThousand(value) {
+    return Math.ceil(value / 1000) * 1000;
+  }
+  const deliveryChargesPerKG = 100;
+  const shippingCost = Number(
+    deliverycharge.deliveryCost * distance +
+      (roundUpToNearestThousand(sum) / 1000) * deliveryChargesPerKG
+  );
+
+  // Adjust the cart total amount if the user is a reseller
+  const adjustedCartTotalAmount = isReseller
+    ? (cartTotalAmount) * 0.8 // Apply 20% discount for resellers
+    : cartTotalAmount;
+
+  const GSTamount = Number(adjustedCartTotalAmount * 0.18).toFixed(2);
   const GSTamountNumber = Number(GSTamount);
   const totalAmount = (
-    cartTotalAmount +
+    adjustedCartTotalAmount +
     shippingCost +
     GSTamountNumber
   ).toFixed(2);
+
+  const getLatLngFromPostalCode = async (postalCode) => {
+    const response = await axios.get(
+      `https://nominatim.openstreetmap.org/search?format=json&q=${postalCode}`
+    );
+    const { lat, lon } = response.data[0];
+    return { lat, lon };
+  };
+
+  // Function to get distance using Google Maps Distance Matrix API
+  const getDistance = async (postalCode) => {
+    try {
+      const userLocation = await getLatLngFromPostalCode(postalCode);
+      const fixedLocation = await getLatLngFromPostalCode("416416");
+
+      const routingControl = L.Routing.control({
+        waypoints: [
+          L.latLng(userLocation.lat, userLocation.lon),
+          L.latLng(fixedLocation.lat, fixedLocation.lon),
+        ],
+        createMarker: function () {
+          return null;
+        },
+        routeWhileDragging: false,
+        showAlternatives: false,
+        addWaypoints: false,
+      });
+
+      routingControl.on("routesfound", function (e) {
+        const route = e.routes[0];
+        const distanceInKm = (route.summary.totalDistance / 1000).toFixed(2);
+        setDistance(distanceInKm);
+        console.log(`Distance: ${distanceInKm} km`);
+      });
+
+      // Trigger the routing calculation manually
+      routingControl.route();
+    } catch (error) {
+      console.error("Error calculating distance:", error);
+    }
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -84,6 +157,10 @@ const Checkout = () => {
       ...prevData,
       [name]: value,
     }));
+    // If postalCode field is updated, fetch the distance
+    if (name === "postalCode" && value.length === 6) {
+      getDistance(value);
+    }
   };
 
   const submitHandler = async (e) => {
@@ -119,7 +196,7 @@ const Checkout = () => {
                 {
                   customerdata: customerdata,
                   cartItem: cartItem,
-                  subtotal: cartTotalAmount,
+                  subtotal: adjustedCartTotalAmount,
                   GST: GSTamount,
                   shippingCost: shippingCost,
                   totalAmount: totalAmount,
@@ -277,7 +354,10 @@ const Checkout = () => {
                 <h6 className="d-flex align-items-center justify-content-between mb-3">
                   Subtotal:{" "}
                   <span>
-                    Rs<span className="ps-2">{cartTotalAmount}</span>
+                    Rs
+                    <span className="ps-2">
+                      {adjustedCartTotalAmount.toFixed(2)}
+                    </span>
                   </span>
                 </h6>
                 <h6 className="d-flex align-items-center justify-content-between mb-3">
@@ -289,16 +369,30 @@ const Checkout = () => {
                 </h6>
                 <h6 className="d-flex align-items-center justify-content-between mb-3">
                   Shipping:{" "}
-                  <span>
-                    Rs<span className="ps-2">{shippingCost}</span>
-                  </span>
+                  {customerdata.postalCode.length < 6 ? (
+                    <>
+                      {" "}
+                      <span className="h6">Enter Postal code</span>{" "}
+                    </>
+                  ) : (
+                    <>
+                      <span className="ps-2">Rs {shippingCost.toFixed(2)}</span>
+                    </>
+                  )}
                 </h6>
                 <div className="checkout__total">
                   <h5 className="d-flex align-items-center justify-content-between">
                     Total:{" "}
-                    <span>
-                      Rs<span className="ps-2">{totalAmount}</span>
-                    </span>
+                    {customerdata.postalCode.length < 6 ? (
+                      <>
+                        {" "}
+                        <span className="h6">Enter Postal code</span>{" "}
+                      </>
+                    ) : (
+                      <>
+                        <span className="ps-2">Rs {totalAmount}</span>
+                      </>
+                    )}
                   </h5>
                 </div>
               </div>

@@ -15,6 +15,14 @@
   margin-top: -20px;
 }
 
+@media only screen and (max-width: 768px) {
+  .logo {
+    width: 50%;
+    object-fit: contain;
+    margin: 30px 10px;
+  }
+}
+
 .logo h5 {
   font-weight: 600;
   font-size: 1rem;
@@ -31,11 +39,11 @@
 }
 
 .menu a:hover {
-  color: #053bce;
+  color: #6f4e37;
 }
 
 .active__menu {
-  color: #053bce !important;
+  color: #6F4E37 !important;
 }
 
 .cart__icon i,
@@ -54,7 +62,7 @@
   position: absolute;
   top: 30px;
   right: -10px;
-  background: #053bce;
+  background: #6f4e37;
   color: #fff;
   width: 15px;
   height: 15px;
@@ -77,7 +85,7 @@
   left: 0;
   background: #fff;
   z-index: 99999;
-  box-shadow: 5px 5px 15px -5px #a2d2ff;
+  box-shadow: 5px 5px 15px -5px #fed8b1;
 }
 
 @media only screen and (max-width: 992px) {
@@ -148,4 +156,45 @@
   .logo h5 {
     margin-top: -55px;
   }
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 80px;
+  right: 140px;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+@media only screen and (max-width: 768px) {
+  .user-dropdown {
+    position: absolute;
+    top: 70px;
+    right: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    z-index: 1000;
+  }
+
+}
+
+.user-dropdown .dropdown-item {
+  display: flex;
+  padding: 0px 15px;
+  color: #212245;
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+  height: 70px;
+}
+
+.user-dropdown .dropdown-item:hover {
+  background: #f1f1f1;
 }

@@ -1,13 +1,14 @@
 .search__widget,
 .sorting__widget select {
   padding: 7px 15px;
-  border: 1px solid #a2d2ff;
+  border: 1px solid #fed8b1;
   border-radius: 5px;
   cursor: pointer;
 }
+
 .search__widget input {
-width: 100%;
-border: none;
+  width: 100%;
+  border: none;
 }
 
 .search__widget input:focus {
@@ -19,10 +20,12 @@ border: none;
     width: 100%;
     margin-bottom: 20px;
   }
+
   .search__widget input {
     width: 100%;
     font-size: 0.8rem;
   }
+
   .sorting__widget select {
     width: 100% !important;
     font-size: 0.8rem;

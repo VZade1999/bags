@@ -8,7 +8,6 @@ import { cartActions } from "../store/shopping-cart/cartSlice";
 import { GetApi } from "../api/api";
 import "../styles/product-details.css";
 import Image from "../assets/images/product_common.png";
-import Image2 from "../assets/images/devesh_bag_logo.png";
 
 const FoodDetails = () => {
   const [tab, setTab] = useState("desc");
@@ -71,6 +70,7 @@ const FoodDetails = () => {
           price: product.price,
           image01: product.image01[0] || Image,
           desc: product.desc,
+          weight: product.weight,
         })
       );
     }
@@ -138,7 +138,7 @@ const FoodDetails = () => {
                       onClick={() => setPreviewImg(img)}
                     >
                       <img
-                        src={`https://bagsbe-production.up.railway.app/${img}`}
+                        src={`http://localhost:5000/${img}`}
                         alt={`Product ${index}`}
                         className="w-50"
                       />
@@ -155,7 +155,7 @@ const FoodDetails = () => {
             <Col lg="4" md="4">
               <div className="product__main-img">
                 <img
-                  src={`https://bagsbe-production.up.railway.app/${previewImg}`}
+                  src={`http://localhost:5000/${previewImg}`}
                   alt="Product"
                   className="w-100"
                 />

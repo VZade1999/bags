@@ -33,13 +33,13 @@
 }
 
 .checkout__form input:focus {
-  border-color: #007bff;
+  border-color: #6f4e37;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 /* Buttons */
 .addTOCart__btn {
-  background-color: #007bff;
+  background-color: #6f4e37;
   color: white;
   /* padding: 15px; */
   border: none;
@@ -51,7 +51,7 @@
 }
 
 .addTOCart__btn:hover {
-  background-color: #0056b3;
+  background-color: #6f4e37;
   transform: scale(1.02);
 }
 
@@ -87,12 +87,12 @@
 
 /* Links */
 .pt-3.text-primary {
-  color: #007bff;
+  color: #6f4e37;
   text-decoration: none;
   font-size: 16px;
   transition: color 0.3s ease;
 }
 
 .pt-3.text-primary:hover {
-  color: #0056b3;
+  color: #6f4e37;
 }

@@ -3,13 +3,21 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 450px;
+  width: 100%;
+  max-width: 450px;
   height: 100%;
   background: #ffffff;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   transform: translateX(100%);
   transition: transform 0.3s ease-in-out;
   z-index: 1000;
+}
+
+/* For screens larger than 768px, you can keep the previous max-width */
+@media (min-width: 769px) {
+  .cart__container {
+    width: 450px;
+  }
 }
 
 .cart__container.active {
@@ -33,7 +41,7 @@
 }
 
 .cart__close span:hover {
-  color: #007bff;
+  color: #6f4e37;
 }
 
 /* Cart Items List */
@@ -56,6 +64,9 @@
   padding: 15px;
   background: #f8f9fa;
   border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .cart__bottom h6 {
@@ -66,25 +77,24 @@
 
 .cart__bottom span {
   font-weight: 700;
-  color: #007bff;
+  color: #6f4e37;
 }
 
 /* Button Styling */
 .addTOCart__btn {
-  /* width: 100%; */
-  /* padding: 12px; */
   border: none;
   border-radius: 10px;
-  background: #007bff;
+  background: #6f4e37;
   color: white;
   font-size: 16px;
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.3s ease;
+  padding: 10px 20px;
 }
 
 .addTOCart__btn:hover {
-  background: #0056b3;
+  background: #6f4e37;
   transform: scale(1.02);
 }
 

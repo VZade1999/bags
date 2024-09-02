@@ -24,13 +24,13 @@
 
 .category span {
   padding: 5px 10px;
-  background: #a2d2ff;
+  background: #fed8b1;
   color: #212245;
   border-radius: 5px;
 }
 
 .tabs {
-  border-bottom: 1px solid #a2d2ff;
+  border-bottom: 1px solid #fed8b1;
 }
 
 .tabs h6 {
@@ -47,13 +47,13 @@
 }
 
 .tab__active {
-  color: #053bce;
+  color: #6f4e37;
 }
 
 .form {
   width: 60%;
   margin: auto;
-  background: #a2d2ff;
+  background: #fed8b1;
   padding: 20px;
   border-radius: 5px;
 }

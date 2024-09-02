@@ -1,9 +1,15 @@
 import React from "react";
+import Slider from 'react-slick';
 
 import Helmet from "../components/Helmet/Helmet.js";
 import { Container, Row, Col, ListGroup, ListGroupItem } from "reactstrap";
 
 import heroImg from "../assets/images/hero_1.png";
+// Your image imports
+
+import heroImg2 from '../assets/images/ava-1.jpg';
+import heroImg3 from '../assets/images/hero_img.png';
+import heroImg4 from '../assets/images/service-01.png';
 import "../styles/hero-section.css";
 
 import { Link } from "react-router-dom";
@@ -16,6 +22,15 @@ import whyImg from "../assets/images/hero_2.png";
 import networkImg from "../assets/images/hero_5.png";
 
 import TestimonialSlider from "../components/UI/slider/TestimonialSlider.jsx";
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 3000,
+};
 
 
 const Home = () => {
@@ -69,10 +84,23 @@ const Home = () => {
             </Col>
 
             <Col lg="6" md="6">
-              <div className="hero__img w-75">
-                <img src={heroImg} alt="hero-img" className="w-100" />
+          <div className="hero__img w-75">
+            <Slider {...settings}>
+              <div>
+                <img src={heroImg} alt="hero-img-1" className="w-100" />
               </div>
-            </Col>
+              <div>
+                <img src={heroImg2} alt="hero-img-2" className="w-100" />
+              </div>
+              <div>
+                <img src={heroImg3} alt="hero-img-3" className="w-100" />
+              </div>
+              <div>
+                <img src={heroImg4} alt="hero-img-4" className="w-100" />
+              </div>
+            </Slider>
+          </div>
+        </Col>
           </Row>
         </Container>
       </section>
