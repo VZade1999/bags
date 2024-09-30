@@ -13,23 +13,37 @@ import "../styles/all-foods.css";
 import "../styles/pagination.css";
 
 const AllBags = () => {
-  const products = useSelector((state) => state.productsData.products);
+  const productList = useSelector((state) => state.productsData.products);
   const cartProducts = useSelector((state) => state.cart.cartItems);
   const [searchTerm, setSearchTerm] = useState("");
   const [pageNumber, setPageNumber] = useState(0);
   const [category, setCategory] = useState("ALL");
-  const [sortOption, setSortOption] = useState("Default"); // State for sorting
+  const [sortOption, setSortOption] = useState("Default");
   const dispatch = useDispatch();
+
+  // Transform products to match the expected format
   const transformProducts = (products) => {
     return products?.map((product) => ({
       id: product._id,
       title: product.name,
-      price: product.price,
-      stock: product.stock,
-      image01: product.images, // Default image if none provided
+      image01: product.images[0] || "", // Get the first image
       category: product.category.name,
-      desc: product.description,
+      desc:
+        product.descriptions?.shortDescription || "No description available", // Safely access shortDescription
+      ShortDesc:
+        product.descriptions?.shortDescription ||
+        "No short description available",
+      LongDesc:
+        product.descriptions?.longDescription ||
+        "No long description available",
       weight: product.weight,
+      packingCharges: product.packingcharges,
+      colors: product.colors.map((color) => ({
+        color: color.color,
+        quantity: color.quantity,
+        price: color.price,
+        _id: color._id, // Include color _id if needed
+      })),
     }));
   };
 
@@ -37,13 +51,8 @@ const AllBags = () => {
     const getAllProducts = async () => {
       try {
         const allProducts = await GetApi("/productlist");
-        const updatedProducts = allProducts.data.map(product => {
-          return {
-            ...product,
-            price: product.price + product.packingcharges
-          };
-        });
-        dispatch(setProducts(transformProducts(updatedProducts)));
+        const updatedProducts = transformProducts(allProducts.data);
+        dispatch(setProducts(updatedProducts));
       } catch (error) {
         alert(error);
       }
@@ -52,73 +61,71 @@ const AllBags = () => {
     getAllProducts();
   }, [dispatch]);
 
+  // Create cartMap based on both product ID and color _id
   const cartMap = useMemo(() => {
     return cartProducts.reduce((acc, item) => {
-      acc[item.id] = item.quantity;
+      if (item.colors) {
+        // Map the quantity by color _id if the product has colors
+        item.colors.forEach((color) => {
+          acc[color._id] = color.quantity;
+        });
+      } else {
+        acc[item.id] = item.quantity;
+      }
       return acc;
     }, {});
   }, [cartProducts]);
 
+  // Updated data with quantities merged into the colors
   const updatedData = useMemo(() => {
-    return products?.map((item) => ({
+    return productList?.map((item) => ({
       ...item,
-      quantity: cartMap[item.id] || 0,
+      colors: item.colors.map((color) => ({
+        ...color,
+        quantity: cartMap[color._id] || color.quantity, // Use cartMap quantity if available
+      })),
     }));
-  }, [products, cartMap]);
+  }, [productList, cartMap]);
 
-  const Categories = useMemo(() => {
-    const categories = updatedData.map((item) => ({
-      id: item.id,
-      CategoryName: item.category,
-    }));
-    return categories.reduce((acc, current) => {
-      if (!acc.some((item) => item.CategoryName === current.CategoryName)) {
-        acc.push(current);
-      }
-      return acc;
-    }, []);
-  }, [updatedData]);
-
-  const [allProducts, setAllProducts] = useState(updatedData);
-
-  useEffect(() => {
+  // Filtered products based on the selected category
+  const filteredProducts = useMemo(() => {
     if (category === "ALL") {
-      setAllProducts(updatedData);
-    } else {
-      const filteredProducts = updatedData.filter(
-        (item) => item.category.toLowerCase() === category.toLowerCase()
-      );
-      setAllProducts(filteredProducts);
+      return updatedData;
     }
+    return updatedData.filter(
+      (item) => item.category?.toLowerCase() === category?.toLowerCase()
+    );
   }, [category, updatedData]);
 
-  const searchedProduct = allProducts.filter((item) => {
-    if (searchTerm === "") {
-      return item;
-    }
-    return item.title.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  // Searched products based on search term
+  const searchedProduct = useMemo(() => {
+    return filteredProducts.filter((item) =>
+      item.title?.toLowerCase().includes(searchTerm?.toLowerCase())
+    );
+  }, [searchTerm, filteredProducts]);
 
   // Sorting function
-  const sortProducts = (products, sortOption) => {
+  const sortProducts = (products) => {
     switch (sortOption) {
       case "ascending":
         return products.sort((a, b) => a.title.localeCompare(b.title));
       case "descending":
         return products.sort((a, b) => b.title.localeCompare(a.title));
       case "high-price":
-        return products.sort((a, b) => b.price - a.price);
+        return products.sort((a, b) => b.colors[0].price - a.colors[0].price);
       case "low-price":
-        return products.sort((a, b) => a.price - b.price);
+        return products.sort((a, b) => a.colors[0].price - b.colors[0].price);
       case "in-stock":
-        return products.sort((a, b) => b.stock - a.stock);
+        return products.sort(
+          (a, b) => b.colors[0].quantity - a.colors[0].quantity
+        );
       default:
         return products;
     }
   };
 
   const sortedProducts = useMemo(
-    () => sortProducts([...searchedProduct], sortOption),
+    () => sortProducts([...searchedProduct]),
     [searchedProduct, sortOption]
   );
 
@@ -135,39 +142,37 @@ const AllBags = () => {
     setPageNumber(selected);
   };
 
-  const changeCategory = (selectedCategory) => {
-    setCategory(selectedCategory.toLowerCase());
-  };
-
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
   };
 
   return (
-    <Helmet title="All-Foods">
+    <Helmet title="All Bags">
       <CommonSection title="All Bags" />
       <section className="pt-3">
         <div>
           <Col lg="12">
-            <div className=" mt-0 food__category d-flex align-items-center justify-content-center gap-4 ">
+            <div className="mt-0 food__category d-flex align-items-center justify-content-center gap-4">
               <button
-                className={`all__btn  ${
+                className={`all__btn ${
                   category === "ALL" ? "foodBtnActive" : ""
-                } `}
+                }`}
                 onClick={() => setCategory("ALL")}
               >
                 All
               </button>
 
-              {Categories.map((item) => (
-                <CategoryButton
-                  key={item.id}
-                  allData={item}
-                  setCategory={setCategory}
-                  changeCategory={changeCategory}
-                  category={category}
-                />
-              ))}
+              {updatedData.length > 0 &&
+                [...new Set(updatedData.map((item) => item.category))].map(
+                  (cat) => (
+                    <CategoryButton
+                      key={cat}
+                      allData={cat}
+                      setCategory={setCategory}
+                      category={category}
+                    />
+                  )
+                )}
             </div>
           </Col>
         </div>
@@ -199,9 +204,6 @@ const AllBags = () => {
                   <option value="in-stock">In Stock</option>
                   <option value="ascending">Alphabetically, A-Z</option>
                   <option value="descending">Alphabetically, Z-A</option>
-                  
-                 
-                   {/* Added option for in-stock sorting */}
                 </select>
               </div>
             </Col>

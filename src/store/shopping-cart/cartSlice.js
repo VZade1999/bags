@@ -1,30 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const items =
-  localStorage.getItem("cartItems") !== null
-    ? JSON.parse(localStorage.getItem("cartItems"))
-    : [];
-
-const totalAmount =
-  localStorage.getItem("totalAmount") !== null
-    ? JSON.parse(localStorage.getItem("totalAmount"))
-    : 0;
-
-const totalQuantity =
-  localStorage.getItem("totalQuantity") !== null
-    ? JSON.parse(localStorage.getItem("totalQuantity"))
-    : 0;
-
-const setItemFunc = (item, totalAmount, totalQuantity) => {
-  localStorage.setItem("cartItems", JSON.stringify(item));
-  localStorage.setItem("totalAmount", JSON.stringify(totalAmount));
-  localStorage.setItem("totalQuantity", JSON.stringify(totalQuantity));
+const loadCartFromLocalStorage = () => {
+  const storedCart = localStorage.getItem("cartItems");
+  return storedCart ? JSON.parse(storedCart) : [];
 };
 
 const initialState = {
-  cartItems: items,
-  totalQuantity: totalQuantity,
-  totalAmount: totalAmount,
+  cartItems: loadCartFromLocalStorage(), // Load initial state from local storage
 };
 
 const cartSlice = createSlice({
@@ -33,101 +15,64 @@ const cartSlice = createSlice({
 
   reducers: {
     // =========== add item ============
+    pushItem(state, action) {
+      state.cartItems.push(action.payload);
+      localStorage.setItem("cartItems", JSON.stringify(state.cartItems)); // Save to local storage
+    },
+
+    // =========== add item ============
     addItem(state, action) {
       const newItem = action.payload;
+
+      // Check if the item already exists in the cart
       const existingItem = state.cartItems.find(
-        (item) => item.id === newItem.id
+        (item) => item.id === newItem.id && item.color === newItem.color
       );
-      state.totalQuantity++;
-
-      if (!existingItem) {
-        // ===== note: if you use just redux you should not mute state array instead of clone the state array, but if you use redux toolkit that will not a problem because redux toolkit clone the array behind the scene
-
-        state.cartItems.push({
-          id: newItem.id,
-          title: newItem.title,
-          desc: newItem.desc,
-          weight: newItem.weight,
-          image01: newItem.image01,
-          price: newItem.price,
-          quantity: 1,
-          totalPrice: newItem.price,
-        });
-      } else {
-        existingItem.quantity++;
-        existingItem.totalPrice =
-          Number(existingItem.totalPrice) + Number(newItem.price);
-      }
-
-      state.totalAmount = state.cartItems.reduce(
-        (total, item) => total + Number(item.price) * Number(item.quantity),
-
-        0
-      );
-
-      setItemFunc(
-        state.cartItems.map((item) => item),
-        state.totalAmount,
-        state.totalQuantity
-      );
-    },
-
-    // ========= remove item ========
-
-    removeItem(state, action) {
-      const id = action.payload;
-      const existingItem = state.cartItems.find((item) => item.id === id);
-      state.totalQuantity--;
-
-      if (existingItem.quantity === 1) {
-        state.cartItems = state.cartItems.filter((item) => item.id !== id);
-      } else {
-        existingItem.quantity--;
-        existingItem.totalPrice =
-          Number(existingItem.totalPrice) - Number(existingItem.price);
-      }
-
-      state.totalAmount = state.cartItems.reduce(
-        (total, item) => total + Number(item.price) * Number(item.quantity),
-        0
-      );
-
-      setItemFunc(
-        state.cartItems.map((item) => item),
-        state.totalAmount,
-        state.totalQuantity
-      );
-    },
-
-    //============ delete item ===========
-
-    deleteItem(state, action) {
-      const id = action.payload;
-      const existingItem = state.cartItems.find((item) => item.id === id);
 
       if (existingItem) {
-        state.cartItems = state.cartItems.filter((item) => item.id !== id);
-        state.totalQuantity = state.totalQuantity - existingItem.quantity;
+        // If it exists, increment the quantity
+        existingItem.quantity += 1;
+      } else {
+        // If it doesn't exist, add it to the cart with quantity of 1
+        newItem.quantity = 1; // Set initial quantity
+        state.cartItems.push(newItem);
       }
 
-      state.totalAmount = state.cartItems.reduce(
-        (total, item) => total + Number(item.price) * Number(item.quantity),
-        0
-      );
-      setItemFunc(
-        state.cartItems.map((item) => item),
-        state.totalAmount,
-        state.totalQuantity
-      );
+      // Save to local storage
+      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
+
+    // =========== remove item ============
+    removeItem(state, action) {
+      const { id, color } = action.payload; // Get both ID and color to identify the item
+
+      const existingItem = state.cartItems.find(
+        (item) => item.id === id && item.color === color
+      );
+
+      if (existingItem) {
+        if (existingItem.quantity > 1) {
+          // If the quantity is greater than 1, decrement it
+          existingItem.quantity -= 1;
+        } else {
+          // If the quantity is 1, remove the item from the cart
+          state.cartItems = state.cartItems.filter(
+            (item) => !(item.id === id && item.color === color)
+          );
+        }
+      }
+
+      // Save to local storage
+      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
+    },
+
+    // =========== clear cart ============
     clearCart(state) {
       state.cartItems = [];
-      state.totalQuantity = 0;
-      state.totalAmount = 0;
-      setItemFunc([], 0, 0);
+      localStorage.removeItem("cartItems"); // Remove from local storage
     },
   },
 });
 
 export const cartActions = cartSlice.actions;
-export default cartSlice;
+export default cartSlice.reducer; // Make sure to export the reducer here

@@ -5,20 +5,39 @@ import CartItem from "./CartItem";
 import { useDispatch, useSelector } from "react-redux";
 import { cartUiActions } from "../../../store/shopping-cart/cartUiSlice";
 import "../../../styles/shopping-cart.css";
+import { cartActions } from "../../../store/shopping-cart/cartSlice";
 
 const Carts = () => {
   const dispatch = useDispatch();
   const cartProducts = useSelector((state) => state.cart.cartItems);
-  const totalAmount = useSelector((state) => state.cart.totalAmount);
+  console.log(cartProducts);
+
+  const calculateTotal = (items) => {
+    return items.reduce((total, item) => {
+      return total + item.price * item.quantity;
+    }, 0);
+  };
+
+  const totalAmount = calculateTotal(cartProducts);
+  console.log("Total Amount:", totalAmount);
 
   const toggleCart = () => {
     dispatch(cartUiActions.toggle());
   };
 
   return (
-    <div className={`cart__container ${cartProducts.length > 0 ? 'active' : ''}`}>
+    <div
+      className={`cart__container ${cartProducts.length > 0 ? "active" : ""}`}
+    >
       <ListGroup className="cart">
-        <div className="cart__close">
+        <div className="cart__close d-flex justify-content-between">
+          <button
+            className="btn btn-secondary mb-3"
+            onClick={()=>dispatch(cartActions.clearCart())}
+          >
+            {" "}
+            Clear Cart
+          </button>
           <span onClick={toggleCart}>
             <i className="ri-close-fill"></i>
           </span>

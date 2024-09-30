@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import product_01_image_01 from "../../assets/images/product_common.png";
 
 export const productSlice = createSlice({
   name: "products",

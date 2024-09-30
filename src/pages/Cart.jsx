@@ -10,10 +10,14 @@ import { Link } from "react-router-dom";
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
-  const totalAmount = useSelector((state) => state.cart.totalAmount);
-  const subtotal = cartItems.reduce((accumulator, item) => {
-    return accumulator + item.totalPrice;
-  }, 0);
+  console.log(cartItems);
+  const calculateTotal = (items) => {
+    return items.reduce((total, item) => {
+      return total + item.price * item.quantity;
+    }, 0);
+  };
+
+  const totalAmount = calculateTotal(cartItems);
 
   return (
     <Helmet title="Cart">
@@ -32,8 +36,9 @@ const Cart = () => {
                       <th>Product Title</th>
                       <th>Product Description</th>
                       <th>Price</th>
-                      <th>Quantity</th>
-                      <th>Delete</th>
+                      <th>Color</th>
+                      <th>Total</th>
+                      <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -47,7 +52,7 @@ const Cart = () => {
               <div className="mt-4">
                 <h6>
                   Subtotal: Rs
-                  <span className="cart__subtotal ps-2">{subtotal}</span>
+                  <span className="cart__subtotal ps-2">{totalAmount}</span>
                 </h6>
                 <p>Taxes and shipping will calculate at checkout</p>
                 <div className="cart__page-btn">
@@ -76,11 +81,30 @@ const Cart = () => {
 };
 
 const Tr = (props) => {
-  const { id, image01, title, price, quantity, desc } = props.item;
+  const { id, image01, title, price, quantity, desc, color, AvlQuantity } =
+    props.item;
   const dispatch = useDispatch();
 
-  const deleteItem = () => {
-    dispatch(cartActions.deleteItem(id));
+  const decreaseItem = () => {
+    dispatch(cartActions.removeItem({ id, color }));
+  };
+
+  const incrementItem = () => {
+    if (quantity >= AvlQuantity) {
+      window.alert(
+        `The available quantity for "${title}" is ${AvlQuantity}. Please adjust the quantity.`
+      );
+    } else {
+      dispatch(
+        cartActions.addItem({
+          id,
+          title,
+          price,
+          image01,
+          color, // Ensure that the color is also passed when incrementing
+        })
+      );
+    }
   };
 
   return (
@@ -94,9 +118,28 @@ const Tr = (props) => {
       <td className="text-center">{title}</td>
       <td className="text-center">{desc}</td>
       <td className="text-center">Rs{price}</td>
-      <td className="text-center">{quantity}</td>
+      <td className="text-center">
+        <span
+          style={{
+            backgroundColor: color, // Use the actual color code
+            display: "inline-block",
+            width: "30px", // Adjust the size
+            height: "30px",
+            border: "1px solid #000", // Optional border to make it more visible
+          }}
+        ></span>
+      </td>
+      <td className="text-center">{quantity * price}</td>
       <td className="text-center cart__item-del">
-        <i className="ri-delete-bin-line" onClick={deleteItem}></i>
+        <div className="d-flex align-items-center justify-content-between increase__decrease-btn">
+          <span className="increase__btn" onClick={incrementItem}>
+            <i className="ri-add-line"></i>
+          </span>
+          <span className="quantity">{quantity}</span>
+          <span className="decrease__btn" onClick={decreaseItem}>
+            <i className="ri-subtract-line"></i>
+          </span>
+        </div>
       </td>
     </tr>
   );

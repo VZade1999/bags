@@ -5,39 +5,41 @@ import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { cartActions } from "../store/shopping-cart/cartSlice";
-import { GetApi } from "../api/api";
 import "../styles/product-details.css";
 import Image from "../assets/images/product_common.png";
 
 const FoodDetails = () => {
   const [tab, setTab] = useState("desc");
-  const [enteredName, setEnteredName] = useState("");
-  const [enteredEmail, setEnteredEmail] = useState("");
-  const [reviewMsg, setReviewMsg] = useState("");
   const [previewImg, setPreviewImg] = useState(null);
-  const [relatedProducts, setRelatedProducts] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
+  const [selectedColor, setSelectedColor] = useState(null); // Track the selected color
 
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const products = useSelector((state) => state.productsData.products);
-  const cartItems = useSelector((state) => state.cart.cartItems);
+  const cartItems = useSelector((state) => state.cart.cartItems); // Get cart items from Redux store
 
-  // Get product from the store or localStorage
+  // Find the product based on id
   const product = useMemo(() => {
-    let foundProduct = products.find((product) => product.id == id);
-
+    let foundProduct = products.find((product) => product.id === id);
     if (!foundProduct) {
       const storedProducts = JSON.parse(localStorage.getItem("products"));
       foundProduct = storedProducts
         ? storedProducts.find((p) => p.id === id)
         : null;
     }
-
     return foundProduct;
   }, [products, id]);
+
+  // Set default color and image when the product changes
+  useEffect(() => {
+    if (product && product.colors && product.colors.length > 0) {
+      setSelectedColor(product.colors[0]); // Default to the first color
+      setPreviewImg(product.image01); // Default to the first image
+    }
+    window.scroll(0, 0); // Scroll to top when the product changes
+  }, [product]);
 
   // Save products to localStorage
   useEffect(() => {
@@ -46,68 +48,36 @@ const FoodDetails = () => {
     }
   }, [products]);
 
-  useEffect(() => {
-    if (product && product.image01 && product.image01.length > 0) {
-      setPreviewImg(product.image01[0]); // Set the first image as the default preview
-    }
-    window.scroll(200, 200);
-  }, [product]);
-
+  // Add to cart functionality with color handling
   const addToCart = () => {
-    if (product) {
-      const cartItem = cartItems.find((item) => item.id === product.id);
-      const currentQuantity = cartItem ? cartItem.quantity : 0;
+    if (!selectedColor) return;
 
-      if (currentQuantity + 1 > product.stock) {
-        alert(`Only ${product.stock} ${product.title} available now.`);
-        return;
-      }
-
-      dispatch(
-        cartActions.addItem({
-          id: product.id,
-          title: product.title,
-          price: product.price,
-          image01: product.image01[0] || Image,
-          desc: product.desc,
-          weight: product.weight,
-        })
-      );
-    }
+    // Dispatch product details to Redux store
+    dispatch(
+      cartActions.addItem({
+        id: product.id,
+        title: product.title,
+        price: selectedColor.price, // Price based on the selected color
+        image01: product.image01 || Image,
+        desc: product.desc,
+        color: selectedColor.color, // Adding color to the cart
+        weight: product.weight,
+        quantity: 1,
+        AvlQuantity: selectedColor.quantity, // Product quantity based on selected color
+      })
+    );
   };
 
-  const handleDecrement = () => {
-    dispatch(cartActions.removeItem(id));
+  const handleColorChange = (colorOption) => {
+    setSelectedColor(colorOption); // Update selected color when a color is clicked
   };
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    setEnteredName("");
-    setEnteredEmail("");
-    setReviewMsg("");
-  };
-
-  useEffect(() => {
-    if (product && product.category) {
-      const fetchRelatedProducts = async () => {
-        const response = await GetApi(`/related-products/${product.category}`);
-        if (response && response.data) {
-          setRelatedProducts(response.data);
-          setTotalPages(Math.ceil(response.data.length / 4));
-        }
-      };
-      fetchRelatedProducts();
-    }
-  }, [product]);
-
-  const handlePageChange = ({ selected }) => {
-    setPageNumber(selected);
-  };
-
-  const paginatedRelatedProducts = relatedProducts.slice(
-    pageNumber * 4,
-    (pageNumber + 1) * 4
-  );
+  // Check if the selected color of the product is already in the cart
+  const isProductInCart = useMemo(() => {
+    return cartItems.some(
+      (item) => item.id === product?.id && item.color === selectedColor?.color
+    );
+  }, [cartItems, product, selectedColor]);
 
   if (!product) {
     return <div>Loading...</div>;
@@ -128,22 +98,20 @@ const FoodDetails = () => {
 
         <Container>
           <Row>
+            {/* Product Images */}
             <Col lg="2" md="2">
               <div className="product__images">
-                {product.image01 && product.image01.length > 0 ? (
-                  product.image01.map((img, index) => (
-                    <div
-                      key={index}
-                      className="img__item mb-3"
-                      onClick={() => setPreviewImg(img)}
-                    >
-                      <img
-                        src={`https://bagsbe-production.up.railway.app/${img}`}
-                        alt={`Product ${index}`}
-                        className="w-50"
-                      />
-                    </div>
-                  ))
+                {product.image01 ? (
+                  <div
+                    className="img__item mb-3"
+                    onClick={() => setPreviewImg(product.image01)}
+                  >
+                    <img
+                      src={`https://bagsbe-production.up.railway.app/${product.image01}`}
+                      alt="Product"
+                      className="w-50"
+                    />
+                  </div>
                 ) : (
                   <div className="img__item mb-3">
                     <img src={Image} alt="Product" className="w-50" />
@@ -152,6 +120,7 @@ const FoodDetails = () => {
               </div>
             </Col>
 
+            {/* Main Image */}
             <Col lg="4" md="4">
               <div className="product__main-img">
                 <img
@@ -162,59 +131,75 @@ const FoodDetails = () => {
               </div>
             </Col>
 
+            {/* Product Details */}
             <Col lg="6" md="6">
               <div className="single__product-content">
                 <h2 className="product__title mb-3">{product.title}</h2>
                 <p className="product__price">
-                  Price: <span>Rs {product.price}</span>
+                  Price: <span>Rs {selectedColor?.price}</span>
                 </p>
                 <p className="category mb-5">
                   Category: <span>{product.category}</span>
                 </p>
 
-                {product.stock === 0 ? (
-                  <button
-                    className="addTOCart__btn py-2 bg-danger"
-                    style={{ width: "25%" }}
-                  >
+                {/* Color Options */}
+                <div className="d-flex gap-2 pb-4">
+                  {product.colors.map((colorOption) => (
+                    <button
+                      key={colorOption._id}
+                      className={`color__btn ${
+                        selectedColor && selectedColor._id === colorOption._id
+                          ? "selected"
+                          : ""
+                      }`}
+                      style={{
+                        backgroundColor: colorOption.color,
+                        border: "1px solid #000",
+                        width: "30px",
+                        height: "30px",
+                      }}
+                      onClick={() => handleColorChange(colorOption)}
+                    ></button>
+                  ))}
+                </div>
+
+                <div className="pb-2">
+                  Selected Colour:{" "}
+                  <span
+                    style={{
+                      backgroundColor: selectedColor?.color,
+                      width: "30px",
+                      height: "30px",
+                      display: "inline-block",
+                      marginLeft: "10px",
+                    }}
+                  ></span>
+                </div>
+
+                {/* Add to Cart or View Cart Button */}
+                {isProductInCart ? (
+                  <div>
+                    <button
+                      className="addTOCart__btn py-2 bg-success"
+                      onClick={() => navigate("/cart")} // Navigate to cart page
+                    >
+                      View Cart
+                    </button>
+                    <p>Product already in cart</p>
+                  </div>
+                ) : selectedColor?.quantity === 0 ? (
+                  <button className="addTOCart__btn py-2 bg-danger" disabled>
                     Out of Stock
                   </button>
-                ) : cartItems.find((item) => item.id === product.id) ? (
-                  <div
-                    className="d-flex addTOCart__btn custom_btn"
-                    style={{ width: "25%" }}
-                  >
-                    <span className="ps-3" onClick={handleDecrement}>
-                      <i
-                        style={{ cursor: "pointer" }}
-                        className="ri-subtract-line"
-                      ></i>
-                    </span>
-                    <span className="ps-3">
-                      {
-                        cartItems.find((item) => item.id === product.id)
-                          .quantity
-                      }
-                    </span>
-                    <span className="ps-3" onClick={addToCart}>
-                      <i
-                        style={{ cursor: "pointer" }}
-                        className="ri-add-line"
-                      ></i>
-                    </span>
-                  </div>
                 ) : (
-                  <button
-                    className="addTOCart__btn py-2"
-                    onClick={addToCart}
-                    style={{ width: "25%" }}
-                  >
+                  <button className="addTOCart__btn py-2" onClick={addToCart}>
                     Add to Cart
                   </button>
                 )}
               </div>
             </Col>
 
+            {/* Description Tab */}
             <Col lg="12">
               <div className="tabs d-flex align-items-center gap-5 py-3">
                 <h6
@@ -227,47 +212,14 @@ const FoodDetails = () => {
 
               {tab === "desc" ? (
                 <div className="tab__content">
-                  <p>{product.desc}</p>
+                  <div>
+                    <p>{product.ShortDesc}</p>
+                  </div>
+                  <div>
+                    <p>{product.LongDesc}</p>
+                  </div>
                 </div>
-              ) : (
-                <div className="tab__form mb-3">
-                  <form className="form" onSubmit={submitHandler}>
-                    <div className="form__group">
-                      <input
-                        type="text"
-                        placeholder="Enter your name"
-                        value={enteredName}
-                        onChange={(e) => setEnteredName(e.target.value)}
-                        required
-                      />
-                    </div>
-
-                    <div className="form__group">
-                      <input
-                        type="text"
-                        placeholder="Enter your email"
-                        value={enteredEmail}
-                        onChange={(e) => setEnteredEmail(e.target.value)}
-                        required
-                      />
-                    </div>
-
-                    <div className="form__group">
-                      <textarea
-                        rows={5}
-                        placeholder="Write your review"
-                        value={reviewMsg}
-                        onChange={(e) => setReviewMsg(e.target.value)}
-                        required
-                      />
-                    </div>
-
-                    <button type="submit" className="addTOCart__btn">
-                      Submit
-                    </button>
-                  </form>
-                </div>
-              )}
+              ) : null}
             </Col>
           </Row>
         </Container>

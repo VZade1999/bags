@@ -35,9 +35,11 @@ const ViewOrders = ({ orderdata }) => {
     setSearchQuery(e.target.value);
   };
 
-  const filteredItems = orderdata.cartItems?.filter(product =>
+  const filteredItems = orderdata.cartItems?.filter((product) =>
     product.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  console.log(filteredItems);
 
   return (
     <>
@@ -92,8 +94,10 @@ const ViewOrders = ({ orderdata }) => {
             <thead>
               <tr>
                 <th scope="col">#</th>
+                <th scope="col">Image</th>
                 <th scope="col">Product Name</th>
                 <th scope="col">Product Description</th>
+                <th scope="col">Colour</th>
                 <th scope="col">Price</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Total</th>
@@ -103,8 +107,36 @@ const ViewOrders = ({ orderdata }) => {
               {filteredItems?.map((product, index) => (
                 <tr key={index}>
                   <th scope="row">{index + 1}</th>
+                  <td>
+                    <img
+                      src={`https://bagsbe-production.up.railway.app/${product.image}`}
+                      alt={product.title} // Add alt text for accessibility
+                      style={{
+                        width: "50px", // Adjust the width of the image
+                        height: "50px", // Adjust the height of the image
+                        objectFit: "cover", // Ensures the image fits nicely within the dimensions
+                        borderRadius: "5px", // Optional: Slightly round the image corners
+                      }}
+                    />
+                  </td>
+
                   <td>{product.title}</td>
                   <td>{product.description}</td>
+                  <td
+                    style={{
+                      padding: "10px", // Padding around the color circle
+                    }}
+                  >
+                    <div
+                      style={{
+                        backgroundColor: product.color, // Color from the product data
+                        width: "30px", // Width of the color circle
+                        height: "30px", // Height of the color circle
+                        borderRadius: "50%", // Make the div a circle
+                        margin: "0 auto", // Center the circle inside the cell
+                      }}
+                    ></div>
+                  </td>
                   <td>{product.price}</td>
                   <td>{product.quantity}</td>
                   <td>{product.quantity * product.price}</td>

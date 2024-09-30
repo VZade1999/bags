@@ -7,13 +7,15 @@ const CategoryButton = ({ category, allData, changeCategory }) => {
       <button
         key={allData.id}
         className={`d-flex align-items-center gap-2 ${
-          category === allData.CategoryName.toLowerCase() ? "foodBtnActive" : ""
+          category === allData.CategoryName?.toLowerCase()
+            ? "foodBtnActive"
+            : ""
         } `}
         onClick={() => changeCategory(allData.CategoryName)}
       >
         <img src={foodCategoryImg01} alt="something" />
-        {allData.CategoryName.charAt(0).toUpperCase() +
-          allData.CategoryName.slice(1)}
+        {allData.CategoryName?.charAt(0).toUpperCase() +
+          allData.CategoryName?.slice(1)}
       </button>
     </>
   );
